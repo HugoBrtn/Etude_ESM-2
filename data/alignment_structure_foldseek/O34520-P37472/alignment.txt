@@ -1,0 +1,52 @@
+forward:
+query: O34520
+target: P37472
+query_length: 213
+target_length: 180
+alntmscore: 3.440E-01
+qtmscore: 1.168E-01
+ttmscore: 1.349E-01
+aligned_length: 61
+fident: 0.081
+qcov: 0.249
+tcov: 0.294
+evalue: 5.268E+00
+
+qaln:
+WSGVAPRIATKYPNV--ASSYFREQGEQVEIIK------LNGSIELAPLIGLADRIVDIVS
+
+taln:
+QDTFPLAIGVLKGALPFMADLIKHIDTYLEMDFMDVSSYGNSTVSSGE--------VKIIK
+
+alignment_blocks:
+WSGVAPRIATKYPNV--ASSYFREQGEQVEIIK------LNGSIELAPLIGLADRIVDIVS
+       |                     |          |               | |  
+QDTFPLAIGVLKGALPFMADLIKHIDTYLEMDFMDVSSYGNSTVSSGE--------VKIIK
+
+
+
+reverse:
+query: P37472
+target: O34520
+query_length: 180
+target_length: 213
+alntmscore: 3.440E-01
+qtmscore: 1.349E-01
+ttmscore: 1.168E-01
+aligned_length: 61
+fident: 0.081
+qcov: 0.294
+tcov: 0.249
+evalue: 5.559E+00
+
+qaln:
+QDTFPLAIGVLKGALPFMADLIKHIDTYLEMDFMDVSSYGNSTVSSGE--------VKIIK
+
+taln:
+WSGVAPRIATKYPNV--ASSYFREQGEQVEIIK------LNGSIELAPLIGLADRIVDIVS
+
+alignment_blocks:
+QDTFPLAIGVLKGALPFMADLIKHIDTYLEMDFMDVSSYGNSTVSSGE--------VKIIK
+       |                     |          |               | |  
+WSGVAPRIATKYPNV--ASSYFREQGEQVEIIK------LNGSIELAPLIGLADRIVDIVS
+

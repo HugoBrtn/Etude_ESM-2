@@ -1,0 +1,12 @@
+forward:
+query: Q6BF25
+target: Q6BF87
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: Q6BF87
+target: Q6BF25
+
+No alignment returned by Foldseek

@@ -1,0 +1,32 @@
+forward:
+query: P54391
+target: P54431
+query_length: 148
+target_length: 63
+alntmscore: 8.457E-01
+qtmscore: 1.211E-01
+ttmscore: 2.751E-01
+aligned_length: 19
+fident: 0.157
+qcov: 0.128
+tcov: 0.302
+evalue: 2.966E+00
+
+qaln:
+DRNEITVQGLKDLREELIT
+
+taln:
+KDCREVVTQLAASRNAIDR
+
+alignment_blocks:
+DRNEITVQGLKDLREELIT
+      |  |   |     
+KDCREVVTQLAASRNAIDR
+
+
+
+reverse:
+query: P54431
+target: P54391
+
+No alignment returned by Foldseek

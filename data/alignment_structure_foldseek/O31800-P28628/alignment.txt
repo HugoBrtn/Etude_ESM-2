@@ -1,0 +1,52 @@
+forward:
+query: O31800
+target: P28628
+query_length: 83
+target_length: 184
+alntmscore: 5.354E-01
+qtmscore: 1.948E-01
+ttmscore: 9.709E-02
+aligned_length: 24
+fident: 0.375
+qcov: 0.289
+tcov: 0.120
+evalue: 4.196E-01
+
+qaln:
+GINVEKSNENLIINWQLSKIEIPI
+
+taln:
+GDTVEMKNDQLYINGK--KVDEPY
+
+alignment_blocks:
+GINVEKSNENLIINWQLSKIEIPI
+|  ||  |  | ||    |   | 
+GDTVEMKNDQLYINGK--KVDEPY
+
+
+
+reverse:
+query: P28628
+target: O31800
+query_length: 184
+target_length: 83
+alntmscore: 4.478E-01
+qtmscore: 9.882E-02
+ttmscore: 1.969E-01
+aligned_length: 26
+fident: 0.346
+qcov: 0.130
+tcov: 0.313
+evalue: 3.030E-01
+
+qaln:
+LPGDTVEMKNDQLYINGK--KVDEPY
+
+taln:
+MLGINVEKSNENLIINWQLSKIEIPI
+
+alignment_blocks:
+LPGDTVEMKNDQLYINGK--KVDEPY
+  |  ||  |  | ||    |   | 
+MLGINVEKSNENLIINWQLSKIEIPI
+

@@ -1,0 +1,32 @@
+forward:
+query: P37002
+target: P52139
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: P52139
+target: P37002
+query_length: 152
+target_length: 127
+alntmscore: 3.900E-01
+qtmscore: 1.028E-01
+ttmscore: 1.195E-01
+aligned_length: 32
+fident: 0.093
+qcov: 0.211
+tcov: 0.236
+evalue: 4.712E+00
+
+qaln:
+VCLIEYSHHACLTECDAMTEHYYRLRDYALQH
+
+taln:
+WALLNVFVN-LLGSFAMTALAFWLF-SASTAH
+
+alignment_blocks:
+VCLIEYSHHACLTECDAMTEHYYRLRDYALQH
+  |        |                   |
+WALLNVFVN-LLGSFAMTALAFWLF-SASTAH
+

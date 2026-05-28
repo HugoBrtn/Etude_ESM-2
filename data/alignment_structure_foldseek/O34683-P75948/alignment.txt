@@ -1,0 +1,32 @@
+forward:
+query: O34683
+target: P75948
+query_length: 194
+target_length: 274
+alntmscore: 1.484E-01
+qtmscore: 4.778E-02
+ttmscore: 4.004E-02
+aligned_length: 41
+fident: 0.195
+qcov: 0.191
+tcov: 0.095
+evalue: 1.611E+00
+
+qaln:
+GIKRYGSAFVPMDEAL----AQVVIDLSNRPHLEMRADFPA
+
+taln:
+GLSG-GSFL------IEHQGQRFVVR---QPH-----DPDA
+
+alignment_blocks:
+GIKRYGSAFVPMDEAL----AQVVIDLSNRPHLEMRADFPA
+|    ||                |      ||     |  |
+GLSG-GSFL------IEHQGQRFVVR---QPH-----DPDA
+
+
+
+reverse:
+query: P75948
+target: O34683
+
+No alignment returned by Foldseek

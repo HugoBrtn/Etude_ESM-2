@@ -1,0 +1,52 @@
+forward:
+query: P0A7J0
+target: P21466
+query_length: 217
+target_length: 200
+alntmscore: 3.002E-01
+qtmscore: 5.585E-02
+ttmscore: 5.961E-02
+aligned_length: 30
+fident: 0.200
+qcov: 0.124
+tcov: 0.145
+evalue: 1.324E+00
+
+qaln:
+KPAGVLCELTNDDGTMARA---PECIEFAN
+
+taln:
+KLEGTFTRLPERSE-LAPEINEALIVEFYS
+
+alignment_blocks:
+KPAGVLCELTNDDGTMARA---PECIEFAN
+|  |    |       |         ||  
+KLEGTFTRLPERSE-LAPEINEALIVEFYS
+
+
+
+reverse:
+query: P21466
+target: P0A7J0
+query_length: 200
+target_length: 217
+alntmscore: 3.557E-01
+qtmscore: 6.436E-02
+ttmscore: 5.981E-02
+aligned_length: 44
+fident: 0.113
+qcov: 0.145
+tcov: 0.203
+evalue: 1.393E+00
+
+qaln:
+KLEGTFTRLPERSE-LAPE--------------INEALIVEFYS
+
+taln:
+KPAGVLCELTNDDGTMARAPECIEFANKHNMALVTIEDLVAYRQ
+
+alignment_blocks:
+KLEGTFTRLPERSE-LAPE--------------INEALIVEFYS
+|  |    |       |                      |    
+KPAGVLCELTNDDGTMARAPECIEFANKHNMALVTIEDLVAYRQ
+

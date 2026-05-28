@@ -1,0 +1,52 @@
+forward:
+query: P12994
+target: P76502
+query_length: 158
+target_length: 161
+alntmscore: 3.274E-01
+qtmscore: 5.742E-02
+ttmscore: 5.640E-02
+aligned_length: 20
+fident: 0.300
+qcov: 0.127
+tcov: 0.112
+evalue: 2.382E+00
+
+qaln:
+GAAPPKGETHRYIFTVHALD
+
+taln:
+GETPPMFTT--SAIASVTLD
+
+alignment_blocks:
+GAAPPKGETHRYIFTVHALD
+|  ||   |         ||
+GETPPMFTT--SAIASVTLD
+
+
+
+reverse:
+query: P76502
+target: P12994
+query_length: 161
+target_length: 158
+alntmscore: 3.274E-01
+qtmscore: 5.640E-02
+ttmscore: 5.742E-02
+aligned_length: 20
+fident: 0.300
+qcov: 0.112
+tcov: 0.127
+evalue: 2.130E+00
+
+qaln:
+GETPPMFTT--SAIASVTLD
+
+taln:
+GAAPPKGETHRYIFTVHALD
+
+alignment_blocks:
+GETPPMFTT--SAIASVTLD
+|  ||   |         ||
+GAAPPKGETHRYIFTVHALD
+

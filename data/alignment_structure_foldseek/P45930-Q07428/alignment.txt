@@ -1,0 +1,60 @@
+forward:
+query: P45930
+target: Q07428
+query_length: 149
+target_length: 116
+alntmscore: 1.647E-01
+qtmscore: 1.034E-01
+ttmscore: 1.251E-01
+aligned_length: 110
+fident: 0.109
+qcov: 0.530
+tcov: 0.716
+evalue: 4.004E-01
+
+qaln:
+FIFKAITTERIDELEKEN-----------------TTYKNVKGRG-----------RVKELDSQRFYARIAVETTVYPNFKAKELREAYKTEDPV-EVAKRVL--SVGGE
+
+taln:
+IVTRPANFEKLKQELGKIGVTSLTFSNVHGCGLQKAHTELYRGVKIESNVYERLKIEIVVS-----------KVPV----------------DQVTETAKRVLKTGSPGD
+
+alignment_blocks:
+FIFKAITTERIDELEKEN-----------------TTYKNVKGRG-----------RVKELDSQRFYARIAVETTVYPNF
+        |                                 |                                |    
+IVTRPANFEKLKQELGKIGVTSLTFSNVHGCGLQKAHTELYRGVKIESNVYERLKIEIVVS-----------KVPV----
+
+KAKELREAYKTEDPV-EVAKRVL--SVGGE
+            | | | |||||     | 
+------------DQVTETAKRVLKTGSPGD
+
+
+
+reverse:
+query: Q07428
+target: P45930
+query_length: 116
+target_length: 149
+alntmscore: 1.647E-01
+qtmscore: 1.251E-01
+ttmscore: 1.034E-01
+aligned_length: 110
+fident: 0.118
+qcov: 0.716
+tcov: 0.530
+evalue: 3.542E-01
+
+qaln:
+IVTRPANFEKLKQELGKIGVTSLTFSNVHGCGLQKAHTELYRGVKIESNVYERLKIEIVVS-----------KVPV----------------DQVTETAKRVLKTGSPGD
+
+taln:
+FIFKAITTERIDELEKEN-----------------TTYKNVKGRG-----------RVKELDSQRFYARIAVETTVYPNFKAKELREAYKTEDPV-EVAKRVLSVG--GE
+
+alignment_blocks:
+IVTRPANFEKLKQELGKIGVTSLTFSNVHGCGLQKAHTELYRGVKIESNVYERLKIEIVVS-----------KVPV----
+        |                                 |                                |    
+FIFKAITTERIDELEKEN-----------------TTYKNVKGRG-----------RVKELDSQRFYARIAVETTVYPNF
+
+------------DQVTETAKRVLKTGSPGD
+            | | | |||||  |  | 
+KAKELREAYKTEDPV-EVAKRVLSVG--GE
+

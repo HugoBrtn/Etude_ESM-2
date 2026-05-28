@@ -1,0 +1,52 @@
+forward:
+query: Q03224
+target: Q06004
+query_length: 321
+target_length: 353
+alntmscore: 4.332E-01
+qtmscore: 1.119E-01
+ttmscore: 1.039E-01
+aligned_length: 60
+fident: 0.216
+qcov: 0.171
+tcov: 0.159
+evalue: 3.849E+00
+
+qaln:
+DNLKAVAKAKNKDVEDVVATILNRERHAKIISELREAGA-RIKLIN--DG--DVAGAINT
+
+taln:
+VGLMAVAAAKAFGAGTIIVT----DLEPLRLEAAKKMGATHIINIREQDALEEIKTITND
+
+alignment_blocks:
+DNLKAVAKAKNKDVEDVVATILNRERHAKIISELREAGA-RIKLIN--DG--DVAGAINT
+  | ||| ||         |                 ||  |  |   |         | 
+VGLMAVAAAKAFGAGTIIVT----DLEPLRLEAAKKMGATHIINIREQDALEEIKTITND
+
+
+
+reverse:
+query: Q06004
+target: Q03224
+query_length: 353
+target_length: 321
+alntmscore: 4.332E-01
+qtmscore: 1.039E-01
+ttmscore: 1.119E-01
+aligned_length: 60
+fident: 0.216
+qcov: 0.159
+tcov: 0.171
+evalue: 3.704E+00
+
+qaln:
+VGLMAVAAAKAFGAGTIIVT----DLEPLRLEAAKKMGATHIINIREQDALEEIKTITND
+
+taln:
+DNLKAVAKAKNKDVEDVVATILNRERHAKIISELREAGA-RIKLIN--DG--DVAGAINT
+
+alignment_blocks:
+VGLMAVAAAKAFGAGTIIVT----DLEPLRLEAAKKMGATHIINIREQDALEEIKTITND
+  | ||| ||         |                 ||  |  |   |         | 
+DNLKAVAKAKNKDVEDVVATILNRERHAKIISELREAGA-RIKLIN--DG--DVAGAINT
+

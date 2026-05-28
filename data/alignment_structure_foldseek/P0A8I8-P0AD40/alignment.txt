@@ -1,0 +1,32 @@
+forward:
+query: P0A8I8
+target: P0AD40
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: P0AD40
+target: P0A8I8
+query_length: 72
+target_length: 155
+alntmscore: 8.912E-01
+qtmscore: 1.362E-01
+ttmscore: 6.389E-02
+aligned_length: 10
+fident: 0.200
+qcov: 0.139
+tcov: 0.065
+evalue: 4.878E+00
+
+qaln:
+YLLWFARKDE
+
+taln:
+YRAWSITTNH
+
+alignment_blocks:
+YLLWFARKDE
+|  |      
+YRAWSITTNH
+

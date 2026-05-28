@@ -1,0 +1,60 @@
+forward:
+query: P19670
+target: P80886
+query_length: 429
+target_length: 385
+alntmscore: 2.307E-01
+qtmscore: 6.450E-02
+ttmscore: 7.030E-02
+aligned_length: 83
+fident: 0.072
+qcov: 0.138
+tcov: 0.213
+evalue: 7.020E-01
+
+qaln:
+VHISG----AKNSAVALIPATILANSEVTIEGLPEISD-----------IETLRDLLKEIGGNVHFEN---------GEMVVD
+
+taln:
+SVPEGKVAFTAEEAVES-AKSLSSSVYVVKAQIHAGGRGKAGGVKIAKSLDEVKAYAEELLGKTLVTHQTGPDGQVIKRLLIE
+
+alignment_blocks:
+VHISG----AKNSAVALIPATILANSEVTIEGLPEISD-----------IETLRDLLKEIGGNVHFEN---------GEM
+    |        ||            |                              |  |                  
+SVPEGKVAFTAEEAVES-AKSLSSSVYVVKAQIHAGGRGKAGGVKIAKSLDEVKAYAEELLGKTLVTHQTGPDGQVIKRL
+
+VVD
+   
+LIE
+
+
+
+reverse:
+query: P80886
+target: P19670
+query_length: 385
+target_length: 429
+alntmscore: 2.129E-01
+qtmscore: 6.072E-02
+ttmscore: 5.601E-02
+aligned_length: 87
+fident: 0.080
+qcov: 0.213
+tcov: 0.138
+evalue: 1.056E+00
+
+qaln:
+SVPEGKVAFTAEEAVESAKSL-----SSSVYVVKAQIHAGGRGKAGGVKIAKSLDEVKAYAEELLGKTLVTHQTGPDGQVIKRLLIE
+
+taln:
+VHISG----AKNSAV----ALIPATILANSEVTIEGLPEISD-----------IETLRDLLKEIGGNVHFEN---------GEMVVD
+
+alignment_blocks:
+SVPEGKVAFTAEEAVESAKSL-----SSSVYVVKAQIHAGGRGKAGGVKIAKSLDEVKAYAEELLGKTLVTHQTGPDGQV
+    |        ||     |          |                              |  |              
+VHISG----AKNSAV----ALIPATILANSEVTIEGLPEISD-----------IETLRDLLKEIGGNVHFEN--------
+
+IKRLLIE
+       
+-GEMVVD
+

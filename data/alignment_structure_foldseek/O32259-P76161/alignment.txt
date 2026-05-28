@@ -1,0 +1,52 @@
+forward:
+query: O32259
+target: P76161
+query_length: 240
+target_length: 250
+alntmscore: 5.935E-01
+qtmscore: 6.721E-02
+ttmscore: 6.464E-02
+aligned_length: 20
+fident: 0.150
+qcov: 0.083
+tcov: 0.076
+evalue: 1.718E+00
+
+qaln:
+PSNSADIEMDLVVGVHGPVK
+
+taln:
+EVVKHYRRGESVIK-EEWVK
+
+alignment_blocks:
+PSNSADIEMDLVVGVHGPVK
+           |      ||
+EVVKHYRRGESVIK-EEWVK
+
+
+
+reverse:
+query: P76161
+target: O32259
+query_length: 250
+target_length: 240
+alntmscore: 7.643E-01
+qtmscore: 5.528E-02
+ttmscore: 5.756E-02
+aligned_length: 14
+fident: 0.071
+qcov: 0.056
+tcov: 0.058
+evalue: 2.518E+00
+
+qaln:
+EVVKHYRRGESVIK
+
+taln:
+PSNSADIEMDLVVG
+
+alignment_blocks:
+EVVKHYRRGESVIK
+           |  
+PSNSADIEMDLVVG
+

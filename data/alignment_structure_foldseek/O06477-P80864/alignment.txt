@@ -1,0 +1,32 @@
+forward:
+query: O06477
+target: P80864
+query_length: 286
+target_length: 167
+alntmscore: 6.440E-01
+qtmscore: 5.453E-02
+ttmscore: 9.073E-02
+aligned_length: 17
+fident: 0.411
+qcov: 0.059
+tcov: 0.102
+evalue: 2.144E+00
+
+qaln:
+IARAIPLHDENGRVIGG
+
+taln:
+LARSVFVLDENGKVVYA
+
+alignment_blocks:
+IARAIPLHDENGRVIGG
+ ||     |||| |   
+LARSVFVLDENGKVVYA
+
+
+
+reverse:
+query: P80864
+target: O06477
+
+No alignment returned by Foldseek

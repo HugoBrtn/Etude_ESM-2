@@ -1,0 +1,52 @@
+forward:
+query: P76576
+target: Q45057
+query_length: 206
+target_length: 217
+alntmscore: 3.426E-01
+qtmscore: 1.359E-01
+ttmscore: 1.308E-01
+aligned_length: 76
+fident: 0.078
+qcov: 0.291
+tcov: 0.304
+evalue: 2.738E+00
+
+qaln:
+ADAALKTLDT-------IKGEGWA---AIVADLRGEALLSKG----DKQGARSAWEAGVKS--DVTPALSEMMQMK
+
+taln:
+VFELLDEIKNADIDVILVQDETRLGRGNAKIALLH-CIYREGVKVYTTAHR---------GELELSEADSMVLEIV
+
+alignment_blocks:
+ADAALKTLDT-------IKGEGWA---AIVADLRGEALLSKG----DKQGARSAWEAGVKS--DVTPALSEMMQMK
+    |               |           |        |                         | |      
+VFELLDEIKNADIDVILVQDETRLGRGNAKIALLH-CIYREGVKVYTTAHR---------GELELSEADSMVLEIV
+
+
+
+reverse:
+query: Q45057
+target: P76576
+query_length: 217
+target_length: 206
+alntmscore: 3.315E-01
+qtmscore: 1.268E-01
+ttmscore: 1.319E-01
+aligned_length: 75
+fident: 0.080
+qcov: 0.300
+tcov: 0.286
+evalue: 2.333E+00
+
+qaln:
+VFELLDEIKNADIDVILVQDETRLGRGNAKIALLH-CIYREGVKVYTTAHR---------GELELSEADSMVLEI
+
+taln:
+ADAALKTLDT-------IKGEGWA---AIVADLRGEALLSKG----DKQGARSAWEAGVKS--DVTPALSEMMQM
+
+alignment_blocks:
+VFELLDEIKNADIDVILVQDETRLGRGNAKIALLH-CIYREGVKVYTTAHR---------GELELSEADSMVLEI
+    |               |           |        |                         | |     
+ADAALKTLDT-------IKGEGWA---AIVADLRGEALLSKG----DKQGARSAWEAGVKS--DVTPALSEMMQM
+

@@ -1,0 +1,56 @@
+forward:
+query: P0A720
+target: P69816
+query_length: 213
+target_length: 106
+alntmscore: 2.656E-01
+qtmscore: 1.380E-01
+ttmscore: 2.284E-01
+aligned_length: 119
+fident: 0.126
+qcov: 0.423
+tcov: 0.972
+evalue: 9.319E-02
+
+qaln:
+SKYIVIEGLEG--AGKTTARNVVVETLEQLG-----------------------IRDMVFTREPGGTQLAEKLRSLVLDIKSVGDEVIT----DKAEVLMFYAARVQLVETVIKPALAN
+
+taln:
+TKIIAVTACPSGVAHTYMAAEALESAAKAKGWEVKVETQGSIGLENELTAEDVASADMVILTKDIGIKFEE----------RFAGKTIVRVNISDAVKRA------DAIMSKIEAHLAQ
+
+alignment_blocks:
+SKYIVIEGLEG--AGKTTARNVVVETLEQLG-----------------------IRDMVFTREPGGTQLAEKLRSLVLDI
+ | |         |    |           |                         |||      |    |         
+TKIIAVTACPSGVAHTYMAAEALESAAKAKGWEVKVETQGSIGLENELTAEDVASADMVILTKDIGIKFEE---------
+
+KSVGDEVIT----DKAEVLMFYAARVQLVETVIKPALAN
+       |       |                |   || 
+-RFAGKTIVRVNISDAVKRA------DAIMSKIEAHLAQ
+
+
+
+reverse:
+query: P69816
+target: P0A720
+query_length: 106
+target_length: 213
+alntmscore: 4.569E-01
+qtmscore: 2.349E-01
+ttmscore: 1.344E-01
+aligned_length: 73
+fident: 0.136
+qcov: 0.689
+tcov: 0.225
+evalue: 1.295E-01
+
+qaln:
+MTKIIAVTACPSGVAHTYMAAEALESAAKAKGWEVKVETQGSIGLENELTAEDVASADMVILTKDIGIKFEER
+
+taln:
+RSKYIVIEGLEG--AGKTTARNVVVETLEQLG-----------------------IRDMVFTREPGGTQLAEK
+
+alignment_blocks:
+MTKIIAVTACPSGVAHTYMAAEALESAAKAKGWEVKVETQGSIGLENELTAEDVASADMVILTKDIGIKFEER
+  | |         |    |           |                         |||      |    | 
+RSKYIVIEGLEG--AGKTTARNVVVETLEQLG-----------------------IRDMVFTREPGGTQLAEK
+

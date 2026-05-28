@@ -1,0 +1,36 @@
+forward:
+query: O31962
+target: P13792
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: P13792
+target: O31962
+query_length: 240
+target_length: 236
+alntmscore: 1.761E-01
+qtmscore: 7.955E-02
+ttmscore: 8.005E-02
+aligned_length: 105
+fident: 0.142
+qcov: 0.333
+tcov: 0.381
+evalue: 4.909E+00
+
+qaln:
+PKLDGI-EVCKQLRQQKLMFPILMLTAKDEEFDKVLGLELGADDYMTKPFSPREV--------------NARVKAILRRSEIAAPS--------SEMKN--DEME
+
+taln:
+DELQEFHDISKSLKQQDS---------QSDLKDIVSCVAAF------NGYTYEEISEMTMYQLYLSFYRMAEVMNYNTTTLFATVSPDVKVSDWSSHINLYKEES
+
+alignment_blocks:
+PKLDGI-EVCKQLRQQKLMFPILMLTAKDEEFDKVLGLELGADDYMTKPFSPREV--------------NARVKAILRRS
+  |       | | ||                | |                  |                | |       
+DELQEFHDISKSLKQQDS---------QSDLKDIVSCVAAF------NGYTYEEISEMTMYQLYLSFYRMAEVMNYNTTT
+
+EIAAPS--------SEMKN--DEME
+  |  |        |   |   |  
+LFATVSPDVKVSDWSSHINLYKEES
+

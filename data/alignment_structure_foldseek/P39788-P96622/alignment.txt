@@ -1,0 +1,32 @@
+forward:
+query: P39788
+target: P96622
+query_length: 219
+target_length: 116
+alntmscore: 7.962E-01
+qtmscore: 6.153E-02
+ttmscore: 1.140E-01
+aligned_length: 14
+fident: 0.000
+qcov: 0.064
+tcov: 0.121
+evalue: 2.800E+00
+
+qaln:
+EDWSVTHHRLIFFG
+
+taln:
+DEMMDKVDEALQIS
+
+alignment_blocks:
+EDWSVTHHRLIFFG
+              
+DEMMDKVDEALQIS
+
+
+
+reverse:
+query: P96622
+target: P39788
+
+No alignment returned by Foldseek

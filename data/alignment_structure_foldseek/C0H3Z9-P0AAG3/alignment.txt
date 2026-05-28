@@ -1,0 +1,12 @@
+forward:
+query: C0H3Z9
+target: P0AAG3
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: P0AAG3
+target: C0H3Z9
+
+No alignment returned by Foldseek

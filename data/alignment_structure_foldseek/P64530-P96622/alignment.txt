@@ -1,0 +1,32 @@
+forward:
+query: P64530
+target: P96622
+query_length: 90
+target_length: 116
+alntmscore: 7.400E-01
+qtmscore: 1.378E-01
+ttmscore: 1.090E-01
+aligned_length: 18
+fident: 0.277
+qcov: 0.167
+tcov: 0.155
+evalue: 1.376E+00
+
+qaln:
+DEL---KREEDLDVVLKV
+
+taln:
+DDEMMDKVDEALQISLAL
+
+alignment_blocks:
+DEL---KREEDLDVVLKV
+|     |  | |   |  
+DDEMMDKVDEALQISLAL
+
+
+
+reverse:
+query: P96622
+target: P64530
+
+No alignment returned by Foldseek

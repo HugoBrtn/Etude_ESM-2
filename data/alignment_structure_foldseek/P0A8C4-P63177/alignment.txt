@@ -1,0 +1,52 @@
+forward:
+query: P0A8C4
+target: P63177
+query_length: 192
+target_length: 243
+alntmscore: 3.592E-01
+qtmscore: 1.041E-01
+ttmscore: 8.377E-02
+aligned_length: 62
+fident: 0.112
+qcov: 0.250
+tcov: 0.251
+evalue: 3.500E+00
+
+qaln:
+TGLTPAEMHGLISGMICGG-------ND-----DSSWLPLLHDLTNEGMAF--GHELAQALR
+
+taln:
+GVTDPHNLGACLRSADAAGVHAVIVPKDRSAQLNATA-KKVACGAAESVPLIRVTNLARTMR
+
+alignment_blocks:
+TGLTPAEMHGLISGMICGG-------ND-----DSSWLPLLHDLTNEGMAF--GHELAQALR
+    |             |        |                  |         ||   |
+GVTDPHNLGACLRSADAAGVHAVIVPKDRSAQLNATA-KKVACGAAESVPLIRVTNLARTMR
+
+
+
+reverse:
+query: P63177
+target: P0A8C4
+query_length: 243
+target_length: 192
+alntmscore: 3.592E-01
+qtmscore: 8.377E-02
+ttmscore: 1.041E-01
+aligned_length: 62
+fident: 0.112
+qcov: 0.251
+tcov: 0.250
+evalue: 3.485E+00
+
+qaln:
+GVTDPHNLGACLRSADAAGVHAVIVPKDRSAQLNATA-KKVACGAAESVPLIRVTNLARTMR
+
+taln:
+TGLTPAEMHGLISGMICGG-------ND-----DSSWLPLLHDLTNEGMAF--GHELAQALR
+
+alignment_blocks:
+GVTDPHNLGACLRSADAAGVHAVIVPKDRSAQLNATA-KKVACGAAESVPLIRVTNLARTMR
+    |             |        |                  |         ||   |
+TGLTPAEMHGLISGMICGG-------ND-----DSSWLPLLHDLTNEGMAF--GHELAQALR
+

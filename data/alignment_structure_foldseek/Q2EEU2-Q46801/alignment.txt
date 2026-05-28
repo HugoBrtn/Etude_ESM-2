@@ -1,0 +1,12 @@
+forward:
+query: Q2EEU2
+target: Q46801
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: Q46801
+target: Q2EEU2
+
+No alignment returned by Foldseek

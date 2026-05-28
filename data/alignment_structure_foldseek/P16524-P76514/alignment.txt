@@ -1,0 +1,52 @@
+forward:
+query: P16524
+target: P76514
+query_length: 393
+target_length: 178
+alntmscore: 2.760E-01
+qtmscore: 5.931E-02
+ttmscore: 1.056E-01
+aligned_length: 70
+fident: 0.085
+qcov: 0.112
+tcov: 0.393
+evalue: 2.124E+00
+
+qaln:
+APKDIAKHILKVH-------QYNVS-------------CASSI------SQKAALEAVTNGFDDALIMRE
+
+taln:
+LPPVMSTPVKYADLIMLATERRDLGLDDGSFWPVLEGIPATEMFNVIPLAPGHAYGMFMERFNDLSELRK
+
+alignment_blocks:
+APKDIAKHILKVH-------QYNVS-------------CASSI------SQKAALEAVTNGFDDALIMRE
+ |                                     |             |       | |    | 
+LPPVMSTPVKYADLIMLATERRDLGLDDGSFWPVLEGIPATEMFNVIPLAPGHAYGMFMERFNDLSELRK
+
+
+
+reverse:
+query: P76514
+target: P16524
+query_length: 178
+target_length: 393
+alntmscore: 2.760E-01
+qtmscore: 1.056E-01
+ttmscore: 5.931E-02
+aligned_length: 70
+fident: 0.085
+qcov: 0.393
+tcov: 0.112
+evalue: 3.967E+00
+
+qaln:
+LPPVMSTPVKYADLIMLATERRDLGLDDGSFWPVLEGIPATEMFNVIPLAPGHAYGMFMERFNDLSELRK
+
+taln:
+APKDIAKHILKVH-------QYNVS-------------CASSI------SQKAALEAVTNGFDDALIMRE
+
+alignment_blocks:
+LPPVMSTPVKYADLIMLATERRDLGLDDGSFWPVLEGIPATEMFNVIPLAPGHAYGMFMERFNDLSELRK
+ |                                     |             |       | |    | 
+APKDIAKHILKVH-------QYNVS-------------CASSI------SQKAALEAVTNGFDDALIMRE
+

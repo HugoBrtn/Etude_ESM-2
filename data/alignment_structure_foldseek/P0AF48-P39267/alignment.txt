@@ -1,0 +1,32 @@
+forward:
+query: P0AF48
+target: P39267
+query_length: 138
+target_length: 292
+alntmscore: 4.815E-01
+qtmscore: 1.314E-01
+ttmscore: 6.574E-02
+aligned_length: 22
+fident: 0.136
+qcov: 0.152
+tcov: 0.075
+evalue: 3.997E+00
+
+qaln:
+NCDPTVRHDMERFFLRT-VPDN
+
+taln:
+NAPLSLRLTLVEKLASMLDPGH
+
+alignment_blocks:
+NCDPTVRHDMERFFLRT-VPDN
+|     |            |  
+NAPLSLRLTLVEKLASMLDPGH
+
+
+
+reverse:
+query: P39267
+target: P0AF48
+
+No alignment returned by Foldseek

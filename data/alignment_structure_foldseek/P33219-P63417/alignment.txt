@@ -1,0 +1,56 @@
+forward:
+query: P33219
+target: P63417
+query_length: 118
+target_length: 167
+alntmscore: 1.584E-01
+qtmscore: 1.127E-01
+ttmscore: 9.149E-02
+aligned_length: 74
+fident: 0.121
+qcov: 0.576
+tcov: 0.323
+evalue: 1.753E+00
+
+qaln:
+DLDAAGIAASVKRDYQ-QNRV-ARWADDQKIVGQADPVAWVSLQDIQGKDDKWSVPLTVRGKSA----DIHYQV
+
+taln:
+PIDAPGIDA--LLRRSFESDAEAKLVHDLREDG------FLT------------LGLVATDDEGQVIGYVAFSP
+
+alignment_blocks:
+DLDAAGIAASVKRDYQ-QNRV-ARWADDQKIVGQADPVAWVSLQDIQGKDDKWSVPLTVRGKSA----DIHYQV
+  || || |             |    |    |                       |                 
+PIDAPGIDA--LLRRSFESDAEAKLVHDLREDG------FLT------------LGLVATDDEGQVIGYVAFSP
+
+
+
+reverse:
+query: P63417
+target: P33219
+query_length: 167
+target_length: 118
+alntmscore: 1.515E-01
+qtmscore: 7.772E-02
+ttmscore: 9.578E-02
+aligned_length: 85
+fident: 0.105
+qcov: 0.359
+tcov: 0.669
+evalue: 1.367E+00
+
+qaln:
+LIRVE-----IPIDAPGIDA--LLRRSFESDAEAKLVHDLREDG------FLT------------LGLVATDDEGQVIGYVAFSP
+
+taln:
+TSKSVTFPKCEDLDAAGIAASVKRDYQ-QNRV-ARWADDQKIVGQADPVAWVSLQDIQGKDDKWSVPLTVRGKSA----DIHYQV
+
+alignment_blocks:
+LIRVE-----IPIDAPGIDA--LLRRSFESDAEAKLVHDLREDG------FLT------------LGLVATDDEGQVIGY
+             || || |             |    |    |                       |            
+TSKSVTFPKCEDLDAAGIAASVKRDYQ-QNRV-ARWADDQKIVGQADPVAWVSLQDIQGKDDKWSVPLTVRGKSA----D
+
+VAFSP
+     
+IHYQV
+

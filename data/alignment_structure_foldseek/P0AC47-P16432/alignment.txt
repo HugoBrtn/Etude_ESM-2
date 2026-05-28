@@ -1,0 +1,60 @@
+forward:
+query: P0AC47
+target: P16432
+query_length: 244
+target_length: 180
+alntmscore: 3.571E-01
+qtmscore: 1.339E-01
+ttmscore: 1.794E-01
+aligned_length: 131
+fident: 0.190
+qcov: 0.463
+tcov: 0.494
+evalue: 2.288E-01
+
+qaln:
+MTHFIESLEAIKPYIIGNSRTADQGTNIQTPAQMAK-----YHQFSGCINCGLCYAACPQFGLNPEFIGPAAITLAHRYNEDSRDHGKKERM-------AQL------NSQNGVWSCTFVGYCSEVCPKHV
+
+taln:
+MFTFIK--KVIK---TGTATSSYPLEPIAVDKNFRGKPEQNPQQ---CIGCAACVNACPS------------------------------NALTVETDLATGELAWEFN----LGHCIFCGRCEEVCPTAA
+
+alignment_blocks:
+MTHFIESLEAIKPYIIGNSRTADQGTNIQTPAQMAK-----YHQFSGCINCGLCYAACPQFGLNPEFIGPAAITLAHRYN
+|  ||     ||    |          |               |   || |  |  |||                     
+MFTFIK--KVIK---TGTATSSYPLEPIAVDKNFRGKPEQNPQQ---CIGCAACVNACPS--------------------
+
+EDSRDHGKKERM-------AQL------NSQNGVWSCTFVGYCSEVCPKHV
+                   |        |       | | | | ||||   
+----------NALTVETDLATGELAWEFN----LGHCIFCGRCEEVCPTAA
+
+
+
+reverse:
+query: P16432
+target: P0AC47
+query_length: 180
+target_length: 244
+alntmscore: 3.571E-01
+qtmscore: 1.794E-01
+ttmscore: 1.339E-01
+aligned_length: 131
+fident: 0.190
+qcov: 0.494
+tcov: 0.463
+evalue: 2.088E-01
+
+qaln:
+MFTFIK--KVIK---TGTATSSYPLEPIAVDKNFRGKPEQNPQQ---CIGCAACVNACPS------------------------------NALTVETDLATGELAWEFN----LGHCIFCGRCEEVCPTAA
+
+taln:
+MTHFIESLEAIKPYIIGNSRTADQGTNIQTPAQMAK-----YHQFSGCINCGLCYAACPQFGLNPEFIGPAAITLAHRYNEDSRDHGKKERM-------AQL------NSQNGVWSCTFVGYCSEVCPKHV
+
+alignment_blocks:
+MFTFIK--KVIK---TGTATSSYPLEPIAVDKNFRGKPEQNPQQ---CIGCAACVNACPS--------------------
+|  ||     ||    |          |               |   || |  |  |||                     
+MTHFIESLEAIKPYIIGNSRTADQGTNIQTPAQMAK-----YHQFSGCINCGLCYAACPQFGLNPEFIGPAAITLAHRYN
+
+----------NALTVETDLATGELAWEFN----LGHCIFCGRCEEVCPTAA
+                   |        |       | | | | ||||   
+EDSRDHGKKERM-------AQL------NSQNGVWSCTFVGYCSEVCPKHV
+

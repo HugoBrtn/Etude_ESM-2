@@ -1,0 +1,52 @@
+forward:
+query: P54574
+target: Q46897
+query_length: 149
+target_length: 199
+alntmscore: 4.926E-01
+qtmscore: 1.050E-01
+ttmscore: 8.046E-02
+aligned_length: 47
+fident: 0.127
+qcov: 0.208
+tcov: 0.226
+evalue: 2.952E+00
+
+qaln:
+IGLATVYRTLELLTELKV------------VDKINFGDG----VSRY
+
+taln:
+IKEAEQIAWLQRKLG-NAARVEDVHPISERPQYFS-GDGKSGKIQTV
+
+alignment_blocks:
+IGLATVYRTLELLTELKV------------VDKINFGDG----VSRY
+|  |     |                          |||        
+IKEAEQIAWLQRKLG-NAARVEDVHPISERPQYFS-GDGKSGKIQTV
+
+
+
+reverse:
+query: Q46897
+target: P54574
+query_length: 199
+target_length: 149
+alntmscore: 4.926E-01
+qtmscore: 8.046E-02
+ttmscore: 1.050E-01
+aligned_length: 47
+fident: 0.127
+qcov: 0.226
+tcov: 0.208
+evalue: 3.609E+00
+
+qaln:
+IKEAEQIAWLQRKLG-NAARVEDVHPISERPQYFS-GDGKSGKIQTV
+
+taln:
+IGLATVYRTLELLTELKV------------VDKINFGDG----VSRY
+
+alignment_blocks:
+IKEAEQIAWLQRKLG-NAARVEDVHPISERPQYFS-GDGKSGKIQTV
+|  |     |                          |||        
+IGLATVYRTLELLTELKV------------VDKINFGDG----VSRY
+

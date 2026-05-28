@@ -1,0 +1,52 @@
+forward:
+query: O32079
+target: P54338
+query_length: 192
+target_length: 141
+alntmscore: 4.389E-01
+qtmscore: 6.457E-02
+ttmscore: 8.364E-02
+aligned_length: 20
+fident: 0.200
+qcov: 0.094
+tcov: 0.128
+evalue: 4.005E+00
+
+qaln:
+TKKAGAREPMFSRGT--EIF
+
+taln:
+QTYKIDFEN--GRITNELIT
+
+alignment_blocks:
+TKKAGAREPMFSRGT--EIF
+       |    | |   | 
+QTYKIDFEN--GRITNELIT
+
+
+
+reverse:
+query: P54338
+target: O32079
+query_length: 141
+target_length: 192
+alntmscore: 2.318E-01
+qtmscore: 6.989E-02
+ttmscore: 5.772E-02
+aligned_length: 26
+fident: 0.269
+qcov: 0.156
+tcov: 0.125
+evalue: 3.882E+00
+
+qaln:
+VSFVVETDEGTL----EIEEVIGEDV
+
+taln:
+IVCIVER-PGAVYTGDEIE-VHSYQR
+
+alignment_blocks:
+VSFVVETDEGTL----EIEEVIGEDV
+    ||   |      ||| |     
+IVCIVER-PGAVYTGDEIE-VHSYQR
+

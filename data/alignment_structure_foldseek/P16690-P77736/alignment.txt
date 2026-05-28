@@ -1,0 +1,32 @@
+forward:
+query: P16690
+target: P77736
+query_length: 185
+target_length: 201
+alntmscore: 5.947E-01
+qtmscore: 8.124E-02
+ttmscore: 7.570E-02
+aligned_length: 26
+fident: 0.269
+qcov: 0.141
+tcov: 0.095
+evalue: 2.179E+00
+
+qaln:
+PEILRQRLENRGRENASEINARLARA
+
+taln:
+LELARERG-------FEEIAQLLIAA
+
+alignment_blocks:
+PEILRQRLENRGRENASEINARLARA
+ |  | |          ||   |  |
+LELARERG-------FEEIAQLLIAA
+
+
+
+reverse:
+query: P77736
+target: P16690
+
+No alignment returned by Foldseek

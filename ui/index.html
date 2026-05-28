@@ -1,0 +1,1540 @@
+<!doctype html>
+<html lang="fr" class="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Comparaison Protéines — Seq / Struct / Emb</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ngl@2.0.0-dev.39/dist/ngl.js"></script>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2128;
+      --surface3: #21262d;
+      --border: #30363d;
+      --border-light: #21262d;
+      --ink: #e6edf3;
+      --ink-muted: #8b949e;
+      --ink-dim: #484f58;
+      --accent: #388bfd;
+      --accent-glow: rgba(56,139,253,0.15);
+      --accent2: #3fb950;
+      --accent3: #f85149;
+      --accent4: #d2a8ff;
+      --loess-color: #ff7b72;
+      --ci-color: rgba(255,123,114,0.18);
+      --ci-line: rgba(255,123,114,0.45);
+      --plot-bg: #0d1117;
+      --plot-grid: #21262d;
+      --plot-zero: #30363d;
+      --font: 'IBM Plex Sans', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+      --radius: 8px;
+      --radius-sm: 5px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+    :root.light {
+      --bg: #f6f8fa;
+      --surface: #ffffff;
+      --surface2: #f6f8fa;
+      --surface3: #eaeef2;
+      --border: #d0d7de;
+      --border-light: #e8ecf0;
+      --ink: #1f2328;
+      --ink-muted: #57606a;
+      --ink-dim: #adb5bd;
+      --accent: #0969da;
+      --accent-glow: rgba(9,105,218,0.12);
+      --accent2: #1a7f37;
+      --accent3: #cf222e;
+      --accent4: #8250df;
+      --loess-color: #cf222e;
+      --ci-color: rgba(207,34,46,0.12);
+      --ci-line: rgba(207,34,46,0.35);
+      --plot-bg: #ffffff;
+      --plot-grid: #eaeef2;
+      --plot-zero: #d0d7de;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      font-size: 13px;
+      color: var(--ink);
+      background: var(--bg);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Layout ──────────────────────────────────────────── */
+    .app {
+      display: grid;
+      grid-template-rows: 48px 1fr;
+      grid-template-columns: 300px 1fr;
+      height: 100vh;
+    }
+    /* ── Top bar ─────────────────────────────────────────── */
+    .topbar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .topbar-logo span { color: var(--accent); }
+    .topbar-sep { width: 1px; height: 20px; background: var(--border); }
+    .stats-badge {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-item { display: flex; align-items: center; gap: 5px; }
+    .stat-val { color: var(--ink); font-weight: 500; }
+    .corr-r { color: var(--accent); font-weight: 600; }
+    .corr-rho { color: var(--accent4); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 6px; }
+    .icon-btn {
+      display: flex; align-items: center; gap: 5px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 4px 9px;
+      color: var(--ink-muted);
+      font-family: var(--font);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .icon-btn:hover { background: var(--surface3); color: var(--ink); border-color: var(--border); }
+    .icon-btn.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent); }
+
+    /* ── Sidebar ─────────────────────────────────────────── */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .panel {
+      border-bottom: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 14px;
+      cursor: pointer;
+      user-select: none;
+      background: var(--surface);
+      transition: background .15s;
+    }
+    .panel-header:hover { background: var(--surface2); }
+    .panel-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--ink-muted);
+    }
+    .panel-arrow {
+      font-size: 10px; color: var(--ink-dim);
+      transition: transform .2s;
+    }
+    .panel.closed .panel-arrow { transform: rotate(-90deg); }
+    .panel-body {
+      padding: 10px 14px 14px;
+      display: grid;
+      gap: 10px;
+      background: var(--surface2);
+    }
+    .panel.closed .panel-body { display: none; }
+
+    /* ── Form elements ───────────────────────────────────── */
+    label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 4px;
+      letter-spacing: .02em;
+    }
+    select, input[type=number], input[type=text] {
+      width: 100%;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 12px;
+      padding: 6px 8px;
+      outline: none;
+      transition: border-color .15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select:focus, input[type=number]:focus { border-color: var(--accent); }
+    select option, select optgroup { background: var(--surface3); color: var(--ink); }
+    :root.light select option, :root.light select optgroup { background: var(--surface3); color: var(--ink); }
+
+    /* Range sliders */
+    .slider-row { display: flex; align-items: center; gap: 8px; }
+    input[type=range] {
+      flex: 1; accent-color: var(--accent); height: 3px; cursor: pointer;
+    }
+    .slider-val {
+      font-size: 11px; font-family: var(--mono);
+      color: var(--accent); min-width: 34px; text-align: right;
+    }
+
+    /* Checkboxes */
+    .check-row {
+      display: flex; align-items: center; gap: 7px;
+      cursor: pointer;
+    }
+    .check-row input[type=checkbox] {
+      accent-color: var(--accent); width: 14px; height: 14px; cursor: pointer;
+    }
+    .check-row label { margin: 0; cursor: pointer; color: var(--ink); font-weight: 400; font-size: 12px; }
+
+    /* Grid helpers */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .g2-1 { display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 8px; }
+    .g3 { display: grid; grid-template-columns: 1.5fr 0.7fr 0.8fr; gap: 6px; }
+
+    /* Divider */
+    .sub-sep {
+      height: 1px; background: var(--border-light); margin: 4px -14px;
+    }
+    .sub-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--ink-dim); margin-bottom: 2px;
+    }
+
+    /* Buttons */
+    .btn {
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--ink-muted);
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 10px;
+      cursor: pointer;
+      transition: all .15s;
+      width: 100%;
+    }
+    .btn:hover { background: var(--surface); color: var(--ink); }
+    .btn.accent { border-color: var(--accent); color: var(--accent); }
+    .btn.accent:hover { background: var(--accent-glow); }
+    .btn.danger { border-color: var(--accent3); color: var(--accent3); }
+    .btn.danger:hover { background: rgba(248,81,73,0.1); }
+
+    /* Filter rows */
+    .filter-row {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      display: grid; gap: 6px;
+    }
+    .filter-rm {
+      font-size: 11px; padding: 3px 7px; width: auto;
+      color: var(--ink-dim); border-color: var(--border-light);
+    }
+    .filter-rm:hover { color: var(--accent3); border-color: var(--accent3); }
+
+    /* ── Main area ───────────────────────────────────────── */
+    .main {
+      display: grid;
+      grid-template-rows: 1fr 280px;
+      overflow: hidden;
+    }
+    .main.no-details { grid-template-rows: 1fr; }
+
+    .plot-wrap {
+      background: var(--surface);
+      overflow: hidden;
+      position: relative;
+    }
+    #plot { width: 100%; height: 100%; }
+
+    /* ── Details panel ───────────────────────────────────── */
+    .details-wrap {
+      border-top: 1px solid var(--border);
+      background: var(--surface2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .details-wrap.hidden { display: none; }
+    .details-tabs {
+      display: flex;
+      gap: 2px;
+      padding: 6px 12px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .dtab {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px 7px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: var(--ink-muted);
+      cursor: pointer;
+      font-family: var(--font);
+      transition: color .15s;
+    }
+    .dtab:hover { color: var(--ink); }
+    .dtab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    #detailsContent {
+      flex: 1;
+      overflow: auto;
+      padding: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .details-empty {
+      color: var(--ink-dim);
+      font-size: 13px;
+      padding: 16px;
+    }
+
+    /* ── Protein detail cards ────────────────────────────── */
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .protein-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: grid; gap: 10px;
+    }
+    .protein-card h3 {
+      font-size: 13px; font-weight: 600;
+      color: var(--ink); margin: 0;
+    }
+    .protein-meta { display: grid; gap: 4px; font-size: 12px; color: var(--ink-muted); }
+    .protein-meta strong { color: var(--ink); font-weight: 500; }
+    .viewer {
+      height: 180px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: #070d14;
+    }
+    pre {
+      margin: 0; padding: 10px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 11px;
+      max-height: 180px; overflow: auto;
+      color: var(--ink-muted);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .align-summary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-bottom: 8px;
+    }
+    .align-summary strong { color: var(--ink); }
+
+    /* ── Multiple select ─────────────────────────────────── */
+    select[multiple] {
+      height: auto;
+      max-height: 90px;
+      padding: 2px;
+    }
+    select[multiple] option { padding: 3px 6px; border-radius: 3px; }
+    select[multiple] option:checked { background: var(--accent-glow); color: var(--accent); }
+
+    /* ── LOESS section ───────────────────────────────────── */
+    .loess-controls { display: grid; gap: 8px; }
+    .loess-top-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .ci-section {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      display: grid; gap: 8px;
+    }
+    .ci-section.disabled { opacity: 0.4; pointer-events: none; }
+
+    /* Tooltip for CI method */
+    .help-text {
+      font-size: 11px;
+      color: var(--ink-dim);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 960px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ── Top bar ─────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-logo">Protéines <span>·</span> Séq / Struct / Emb</span>
+      <div class="topbar-sep"></div>
+      <div class="stats-badge">
+        <div class="stat-item" id="metaInfo"><span class="stat-val">—</span></div>
+        <div class="topbar-sep"></div>
+        <div class="stat-item">
+          <span class="corr-r" id="pearsonInfo">r = —</span>
+        </div>
+        <div class="stat-item">
+          <span class="corr-rho" id="spearmanInfo">ρ = —</span>
+        </div>
+        <div class="stat-item">
+          <span class="ink-muted">n =</span>&nbsp;<span class="stat-val" id="nInfo">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn active" id="toggleTheme" title="Basculer thème clair/sombre">🌙 Thème sombre</button>
+      <button class="icon-btn active" id="toggleDetails" title="Détails">⊟ Détails</button>
+      <button class="icon-btn active" id="toggleLegend" title="Légende">⊟ Légende</button>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ─────────────────────────────────── -->
+  <aside class="sidebar">
+
+    <!-- Affichage -->
+    <div class="panel" id="panelDisplay">
+      <div class="panel-header" onclick="togglePanel('panelDisplay')">
+        <span class="panel-title">Affichage</span>
+        <span class="panel-arrow">▾</span>
+      </div>
+      <div class="panel-body">
+        <div class="sub-label">Visibilité</div>
+        <div style="display:grid;gap:6px;">
+          <label class="check-row">
+            <input type="checkbox" id="showPoints" checked />
+            <span>Nuage de points</span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" id="showLoess" checked />
+            <span>Courbe LOESS</span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" id="showConfidence" />
+            <span>Intervalle de confiance</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Axes -->
+    <div class="panel" id="panelAxes">
+      <div class="panel-header" onclick="togglePanel('panelAxes')">
+        <span class="panel-title">Axes & encodages</span>
+        <span class="panel-arrow">▾</span>
+      </div>
+      <div class="panel-body">
+        <div>
+          <label for="xMetric">Axe X</label>
+          <select id="xMetric"></select>
+        </div>
+        <div>
+          <label for="yMetric">Axe Y</label>
+          <select id="yMetric"></select>
+        </div>
+        <div class="g2">
+          <div>
+            <label for="colorMetric">Couleur</label>
+            <select id="colorMetric"></select>
+          </div>
+          <div>
+            <label for="sizeMetric">Taille</label>
+            <select id="sizeMetric"></select>
+          </div>
+        </div>
+        <!-- coverageThreshold moved to quick filters -->
+      </div>
+    </div>
+
+    <!-- LOESS & CI -->
+    <div class="panel" id="panelLoess">
+      <div class="panel-header" onclick="togglePanel('panelLoess')">
+        <span class="panel-title">LOESS & intervalle de confiance</span>
+        <span class="panel-arrow">▾</span>
+      </div>
+      <div class="panel-body">
+        <div class="loess-controls">
+          <!-- LOESS params -->
+          <div class="sub-label">Paramètres LOESS</div>
+          <div>
+            <label for="loessFrac">Fraction de fenêtre</label>
+            <div class="slider-row">
+              <input id="loessFrac" type="range" min="0.1" max="1.0" step="0.05" value="0.3" />
+              <span class="slider-val" id="loessFracValue">0.30</span>
+            </div>
+          </div>
+          <div>
+            <label for="loessIterations">Itérations (robustesse)</label>
+            <div class="slider-row">
+              <input id="loessIterations" type="range" min="0" max="10" step="1" value="3" />
+              <span class="slider-val" id="loessIterationsValue">3</span>
+            </div>
+          </div>
+
+          <div class="sub-sep"></div>
+
+          <!-- CI params -->
+          <div class="sub-label">Intervalle de confiance</div>
+
+          <div class="ci-section" id="ciSection">
+            <div>
+              <label for="ciMethod">Méthode</label>
+              <select id="ciMethod">
+                <option value="pred">Intervalle de prédiction (résidus LOESS)</option>
+                <option value="boot">Bootstrap (incertitude de la courbe)</option>
+                <option value="combined">Combiné (prédiction + bootstrap)</option>
+              </select>
+            </div>
+            <div class="help-text" id="ciMethodHelp">
+              Couvre la dispersion réelle des points autour de la courbe. Plus large et plus utile pour visualiser la variabilité.
+            </div>
+            <div class="g2">
+              <div>
+                <label for="confLevel">Niveau (%)</label>
+                <input id="confLevel" type="number" min="50" max="99" step="1" value="95" />
+              </div>
+              <div>
+                <label for="confSamples">N bootstrap</label>
+                <input id="confSamples" type="number" min="50" max="2000" step="50" value="200" />
+              </div>
+            </div>
+            <div class="help-text" style="color:var(--ink-dim);">N bootstrap utilisé seulement pour les méthodes Bootstrap / Combiné.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtres rapides -->
+    <div class="panel" id="panelFiltersQuick">
+      <div class="panel-header" onclick="togglePanel('panelFiltersQuick')">
+        <span class="panel-title">Filtres rapides</span>
+        <span class="panel-arrow">▾</span>
+      </div>
+      <div class="panel-body">
+        <div>
+          <label for="speciesRelation">Relation espèces</label>
+          <select id="speciesRelation">
+            <option value="both">Inter + intra espèces</option>
+            <option value="intra">Intra-espèces uniquement</option>
+            <option value="inter">Inter-espèces uniquement</option>
+          </select>
+        </div>
+        <div>
+          <label for="coverageThreshold">Seuil coverage MMseqs2 (qcov/tcov min)</label>
+          <input id="coverageThreshold" type="number" min="0.3" max="1" step="0.01" value="0.30" />
+        </div>
+        <div class="g2">
+          <div>
+            <label for="filterQuerySpecies">Espèce query</label>
+            <select id="filterQuerySpecies" multiple size="4"></select>
+          </div>
+          <div>
+            <label for="filterTargetSpecies">Espèce target</label>
+            <select id="filterTargetSpecies" multiple size="4"></select>
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <label for="filterQueryProtein">Protéine query</label>
+            <select id="filterQueryProtein" multiple size="4"></select>
+          </div>
+          <div>
+            <label for="filterTargetProtein">Protéine target</label>
+            <select id="filterTargetProtein" multiple size="4"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtres avancés -->
+    <div class="panel" id="panelFiltersAdv">
+      <div class="panel-header" onclick="togglePanel('panelFiltersAdv')">
+        <span class="panel-title">Filtres avancés</span>
+        <span class="panel-arrow">▾</span>
+      </div>
+      <div class="panel-body">
+        <div class="filters" id="filters"></div>
+        <div class="g2">
+          <button class="btn" id="addFilter">+ Ajouter filtre</button>
+          <button class="btn danger" id="clearFilters">Effacer tout</button>
+        </div>
+        <div class="g2">
+          <button class="btn accent" id="applyFilters">Appliquer</button>
+          <button class="btn" id="resetView">Réinitialiser</button>
+        </div>
+        <div class="help-text" style="color:var(--ink-dim)">Cliquez sur un point pour afficher détails, alignements et structures 3D.</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── Main / plot ─────────────────────────────── -->
+  <div class="main" id="mainArea">
+    <div class="plot-wrap">
+      <div id="plot"></div>
+    </div>
+
+    <div class="details-wrap" id="detailsWrap">
+      <div class="details-tabs">
+        <button class="dtab active" data-tab="summary">Résumé</button>
+        <button class="dtab" data-tab="mmseq2">MMseqs2</button>
+        <button class="dtab" data-tab="needleman">Needleman</button>
+        <button class="dtab" data-tab="tmalign">TM-Align</button>
+        <button class="dtab" data-tab="foldseek">Foldseek</button>
+      </div>
+      <div id="detailsContent">
+        <div class="details-empty">Cliquez sur un point pour afficher les détails.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="app_data.js"></script>
+<script>
+  /* ─────────────────────────────────────────────────────────
+     STATE
+  ───────────────────────────────────────────────────────── */
+  const state = {
+    metrics: [],
+    selected: null,
+    filtered: [],
+    pairs: [],
+    proteins: [],
+    proteinMap: {},
+    filters: [],
+    tab: 'summary',
+    stages: {},
+    appConfig: {},
+    coverageThreshold: 0.3,
+    plotNonce: 0,
+    showLoess: true,
+    showPoints: true,
+    showLegend: true,
+    showDetails: true
+  };
+
+  /* ─────────────────────────────────────────────────────────
+     PANEL TOGGLE
+  ───────────────────────────────────────────────────────── */
+  function togglePanel(id) {
+    document.getElementById(id).classList.toggle('closed');
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     DATA LOADING
+  ───────────────────────────────────────────────────────── */
+  async function loadData() {
+    if (window.APP_DATA && window.APP_DATA.pairs) return window.APP_DATA;
+    const [pairsResp, proteinsResp] = await Promise.all([
+      fetch('/api/pairs_global'),
+      fetch('/api/proteins_global')
+    ]);
+    const pairsData     = pairsResp.ok     ? await pairsResp.json()     : { pairs: [] };
+    const proteinsData  = proteinsResp.ok  ? await proteinsResp.json()  : { proteins: [] };
+    return { pairs: pairsData.pairs || [], proteins: proteinsData.proteins || [] };
+  }
+
+  function isNumeric(v) {
+    if (typeof v === 'number' && Number.isFinite(v)) return true;
+    if (typeof v === 'string') {
+      const s = v.trim();
+      return s !== '' && Number.isFinite(Number(s));
+    }
+    return false;
+  }
+
+  function inferMetrics(rows) {
+    const keys = new Set();
+    rows.forEach(r => Object.keys(r).forEach(k => keys.add(k)));
+    const metrics = [];
+    keys.forEach(k => {
+      if (['pair_id','query','target','query_species','target_species'].includes(k)) return;
+      if (rows.some(r => isNumeric(r[k]))) metrics.push(k);
+    });
+    return metrics.sort();
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     METRIC DEFINITIONS
+  ───────────────────────────────────────────────────────── */
+  const TAXON_NAMES = {
+    'taxon_83333': 'E. Coli (83333)',
+    'taxon_224308': 'B. Subtilis (224308)',
+  };
+  function getTaxonLabel(k) { return TAXON_NAMES[k] || k; }
+
+  const METRIC_GROUPS = [
+    { label: 'ESM-2 Mean pooling', items: [
+      { label: 'Sans traitement', value: 'emb_mean_raw' },
+      { label: 'Normalisation', value: 'emb_mean_normalized' },
+      { label: 'Sans outliers std', value: 'emb_mean_std_outliers_filtered' },
+      { label: 'Seulement outliers std', value: 'emb_mean_std_outliers_only' },
+      { label: 'Sans outliers moyennes', value: 'emb_mean_mean_outliers_filtered' },
+      { label: 'Seulement outliers moyenne', value: 'emb_mean_mean_outliers_only' },
+    ] },
+    { label: 'ESM-2 BOS pooling', items: [
+      { label: 'Sans traitement', value: 'emb_bos_raw' },
+      { label: 'Normalisation', value: 'emb_bos_normalized' },
+      { label: 'Sans outliers std', value: 'emb_bos_std_outliers_filtered' },
+      { label: 'Seulement outliers std', value: 'emb_bos_std_outliers_only' },
+      { label: 'Sans outliers moyennes', value: 'emb_bos_mean_outliers_filtered' },
+      { label: 'Seulement outliers moyenne', value: 'emb_bos_mean_outliers_only' },
+    ] },
+    { label: 'ESM-2 Sum pooling', items: [
+      { label: 'Sans traitement', value: 'emb_sum_raw' },
+      { label: 'Normalisation', value: 'emb_sum_normalized' },
+      { label: 'Sans outliers std', value: 'emb_sum_std_outliers_filtered' },
+      { label: 'Seulement outliers std', value: 'emb_sum_std_outliers_only' },
+      { label: 'Sans outliers moyennes', value: 'emb_sum_mean_outliers_filtered' },
+      { label: 'Seulement outliers moyenne', value: 'emb_sum_mean_outliers_only' },
+    ] },
+    { label: 'ESM-2 Max pooling', items: [
+      { label: 'Sans traitement', value: 'emb_max_raw' },
+      { label: 'Normalisation', value: 'emb_max_normalized' },
+      { label: 'Sans outliers std', value: 'emb_max_std_outliers_filtered' },
+      { label: 'Seulement outliers std', value: 'emb_max_std_outliers_only' },
+      { label: 'Sans outliers moyennes', value: 'emb_max_mean_outliers_filtered' },
+      { label: 'Seulement outliers moyenne', value: 'emb_max_mean_outliers_only' },
+    ] },
+    { label: 'ESM-2 Mahalanobis pooling', items: [
+      { label: 'Sans traitement', value: 'emb_mahalanobis_raw' },
+      { label: 'Normalisation', value: 'emb_mahalanobis_normalized' },
+      { label: 'Sans outliers std', value: 'emb_mahalanobis_std_outliers_filtered' },
+      { label: 'Seulement outliers std', value: 'emb_mahalanobis_std_outliers_only' },
+      { label: 'Sans outliers moyennes', value: 'emb_mahalanobis_mean_outliers_filtered' },
+      { label: 'Seulement outliers moyenne', value: 'emb_mahalanobis_mean_outliers_only' },
+    ] },
+    { label: 'MMseq2 alignement', items: [
+      { label: 'alnlen', value: 'mmseq2_alnlen' }, { label: 'bits', value: 'mmseq2_bits' },
+      { label: 'e-value', value: 'mmseq2_evalue' }, { label: 'pident', value: 'mmseq2_pident' },
+      { label: 'qcov', value: 'mmseq2_qcov' }, { label: 'tcov', value: 'mmseq2_tcov' },
+    ] },
+    { label: 'Needleman-Wunsch alignement', items: [
+      { label: 'alnlen', value: 'nw_alnlen' }, { label: 'score', value: 'nw_score' },
+      { label: 'pident', value: 'nw_pident' }, { label: 'qcov', value: 'nw_qcov' },
+      { label: 'tcov', value: 'nw_tcov' },
+    ] },
+    { label: 'TM-align', items: [
+      { label: 'tm align', value: 'tm_l_align' }, { label: 'tm align reverse', value: 'tm_l_align_reverse' },
+      { label: 'tm score', value: 'tm_score' }, { label: 'tm score reverse', value: 'tm_score_reverse' },
+      { label: 'tm identity (%)', value: 'tm_id_align_percent' },
+      { label: 'tm identity reverse (%)', value: 'tm_id_align_percent_reverse' },
+      { label: 'tm rmsd', value: 'tm_rmsd' },
+    ] },
+    { label: 'Foldseek', items: [
+      { label: 'tm score', value: 'foldseek_tm_score' }, { label: 'aligned length', value: 'foldseek_alnlen' },
+      { label: 'identity (fident)', value: 'foldseek_fident' }, { label: 'e-value', value: 'foldseek_evalue' },
+      { label: 'bits', value: 'foldseek_bits' },
+      { label: 'tm score reverse', value: 'foldseek_tm_score_reverse' },
+      { label: 'aligned length reverse', value: 'foldseek_alnlen_reverse' },
+      { label: 'identity reverse (fident)', value: 'foldseek_fident_reverse' },
+      { label: 'e-value reverse', value: 'foldseek_evalue_reverse' },
+      { label: 'bits reverse', value: 'foldseek_bits_reverse' },
+    ] },
+  ];
+
+  const AXIS_METRIC_VALUES = METRIC_GROUPS.flatMap(g => g.items.map(i => i.value));
+
+  const COLUMN_LABELS = {
+    query_species: 'Espèce query', target_species: 'Espèce target',
+    query_protein_name: 'Nom protéine query', target_protein_name: 'Nom protéine target',
+    query_gene_names: 'Gènes query', target_gene_names: 'Gènes target',
+    query_subunit_type: 'Sous-unité query', target_subunit_type: 'Sous-unité target',
+    query_length: 'Longueur query', target_length: 'Longueur target',
+  };
+
+  function columnDisplayName(v) {
+    if (!v) return v;
+    if (COLUMN_LABELS[v]) return COLUMN_LABELS[v];
+    const ml = metricDisplayName(v);
+    if (ml !== v) return ml;
+    return v.replaceAll('_reverse', ' inverse').replaceAll('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function metricDisplayName(value) {
+    if (!value || value === 'NONE') return 'Aucun';
+    for (const g of METRIC_GROUPS) {
+      const it = g.items.find(e => e.value === value);
+      if (it) return `${g.label} — ${it.label}`;
+    }
+    return value;
+  }
+
+  function populateMetricSelect(select, includeNone = false) {
+    select.innerHTML = '';
+    if (includeNone) {
+      const o = document.createElement('option');
+      o.value = 'NONE'; o.textContent = 'Aucun';
+      select.appendChild(o);
+    }
+    METRIC_GROUPS.forEach(g => {
+      const og = document.createElement('optgroup');
+      og.label = g.label;
+      g.items.forEach(it => {
+        const o = document.createElement('option');
+        o.value = it.value;
+        o.textContent = `${g.label} — ${it.label}`;
+        og.appendChild(o);
+      });
+      select.appendChild(og);
+    });
+  }
+
+  function fillSelect(select, options, withEmpty = false, useLabel = false) {
+    select.innerHTML = '';
+    if (withEmpty) {
+      const o = document.createElement('option'); o.value = ''; o.textContent = 'Toutes';
+      select.appendChild(o);
+    }
+    options.forEach(v => {
+      const o = document.createElement('option');
+      o.value = v; o.textContent = useLabel ? getTaxonLabel(v) : v;
+      select.appendChild(o);
+    });
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     SETUP CONTROLS
+  ───────────────────────────────────────────────────────── */
+  function setupControls() {
+    const xEl = document.getElementById('xMetric');
+    const yEl = document.getElementById('yMetric');
+    const cEl = document.getElementById('colorMetric');
+    const sEl = document.getElementById('sizeMetric');
+    populateMetricSelect(xEl, false);
+    populateMetricSelect(yEl, false);
+    populateMetricSelect(cEl, true);
+    populateMetricSelect(sEl, true);
+    xEl.value = 'emb_mean_raw';
+    yEl.value = 'tm_score';
+    cEl.value = 'NONE';
+    sEl.value = 'NONE';
+
+    const querySpecies   = document.getElementById('filterQuerySpecies');
+    const targetSpecies  = document.getElementById('filterTargetSpecies');
+    const queryProtein   = document.getElementById('filterQueryProtein');
+    const targetProtein  = document.getElementById('filterTargetProtein');
+
+    const species = Array.from(new Set(state.proteins.map(p => p.species_key).filter(Boolean))).sort();
+    fillSelect(querySpecies,  species, false, true);
+    fillSelect(targetSpecies, species, false, true);
+    fillSelect(queryProtein,  state.proteins.map(p => p.accession).sort(), false);
+    fillSelect(targetProtein, state.proteins.map(p => p.accession).sort(), false);
+
+    const refreshProteinOptions = () => {
+      const sq = new Set(Array.from(querySpecies.selectedOptions).map(o => o.value));
+      const st = new Set(Array.from(targetSpecies.selectedOptions).map(o => o.value));
+      const qp = state.proteins.filter(p => !sq.size || sq.has(p.species_key));
+      const tp = state.proteins.filter(p => !st.size || st.has(p.species_key));
+      fillSelect(queryProtein,  qp.map(p => p.accession).sort(), false);
+      fillSelect(targetProtein, tp.map(p => p.accession).sort(), false);
+    };
+    querySpecies.addEventListener('change', refreshProteinOptions);
+    targetSpecies.addEventListener('change', refreshProteinOptions);
+    refreshProteinOptions();
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     FILTER ROWS
+  ───────────────────────────────────────────────────────── */
+  function addFilterRow(defaultColumn) {
+    const container = document.getElementById('filters');
+    const row = document.createElement('div');
+    row.className = 'filter-row';
+
+    const colSelect = document.createElement('select');
+    METRIC_GROUPS.forEach(g => {
+      const og = document.createElement('optgroup');
+      og.label = g.label;
+      g.items.forEach(it => {
+        const op = document.createElement('option');
+        op.value = it.value; op.textContent = `${g.label} — ${it.label}`;
+        og.appendChild(op);
+      });
+      colSelect.appendChild(og);
+    });
+    colSelect.value = AXIS_METRIC_VALUES.includes(defaultColumn) ? defaultColumn : AXIS_METRIC_VALUES[0];
+
+    const opSelect   = document.createElement('select');
+    const valueInput = document.createElement('input');
+    valueInput.type  = 'text';
+    valueInput.placeholder = 'valeur';
+
+    const g3 = document.createElement('div');
+    g3.className = 'g3';
+    g3.appendChild(colSelect);
+    g3.appendChild(opSelect);
+    g3.appendChild(valueInput);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'btn filter-rm';
+    removeBtn.textContent = '✕ Supprimer';
+    removeBtn.addEventListener('click', () => { container.removeChild(row); syncFiltersFromUI(); });
+
+    row.appendChild(g3);
+    row.appendChild(removeBtn);
+    container.appendChild(row);
+
+    function updateOps() {
+      const numeric = state.numericColumns?.has(colSelect.value) || AXIS_METRIC_VALUES.includes(colSelect.value);
+      opSelect.innerHTML = '';
+      const ops = numeric ? ['>=','<=','>','<','=','between'] : ['contains','equals','not equals'];
+      ops.forEach(op => {
+        const el = document.createElement('option');
+        el.value = op; el.textContent = op;
+        opSelect.appendChild(el);
+      });
+    }
+    colSelect.addEventListener('change', updateOps);
+    updateOps();
+  }
+
+  function syncFiltersFromUI() {
+    state.filters = Array.from(document.querySelectorAll('.filter-row')).map(row => {
+      const sels = row.querySelectorAll('select');
+      const inp  = row.querySelector('input');
+      return { column: sels[0].value, op: sels[1].value, value: inp.value };
+    });
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     APPLY FILTERS
+  ───────────────────────────────────────────────────────── */
+  function applyFilters() {
+    syncFiltersFromUI();
+    const threshold = Number(document.getElementById('coverageThreshold')?.value ?? 0.3);
+    state.coverageThreshold = Number.isFinite(threshold) ? threshold : 0.3;
+
+    const qs = new Set(Array.from(document.getElementById('filterQuerySpecies').selectedOptions).map(o => o.value));
+    const ts = new Set(Array.from(document.getElementById('filterTargetSpecies').selectedOptions).map(o => o.value));
+    const qp = new Set(Array.from(document.getElementById('filterQueryProtein').selectedOptions).map(o => o.value));
+    const tp = new Set(Array.from(document.getElementById('filterTargetProtein').selectedOptions).map(o => o.value));
+    const sr = document.getElementById('speciesRelation')?.value || 'both';
+
+    state.filtered = state.pairs.filter(r => {
+      const qcov = Number(r.mmseq2_qcov);
+      const tcov = Number(r.mmseq2_tcov);
+      if (!Number.isFinite(qcov) || !Number.isFinite(tcov)) return false;
+      if (qcov < state.coverageThreshold || tcov < state.coverageThreshold) return false;
+      if (qs.size > 0 && !qs.has(r.query_species))  return false;
+      if (ts.size > 0 && !ts.has(r.target_species)) return false;
+      if (qp.size > 0 && !qp.has(r.query))          return false;
+      if (tp.size > 0 && !tp.has(r.target))          return false;
+      if (sr === 'intra' && String(r.query_species) !== String(r.target_species)) return false;
+      if (sr === 'inter' && String(r.query_species) === String(r.target_species)) return false;
+      for (const f of state.filters) {
+        const raw = r[f.column];
+        if (raw === undefined || raw === null || raw === '') return false;
+        const numeric = state.numericColumns?.has(f.column);
+        if (numeric) {
+          const val = Number(raw);
+          if (Number.isNaN(val)) return false;
+          const v = f.value.trim();
+          if (f.op === 'between') {
+            const parts = v.split(',').map(x => Number(x.trim()));
+            if (parts.length !== 2 || parts.some(Number.isNaN)) return false;
+            if (!(val >= parts[0] && val <= parts[1])) return false;
+          } else {
+            const target = Number(v);
+            if (Number.isNaN(target)) return false;
+            if (f.op === '>='  && !(val >= target))  return false;
+            if (f.op === '<='  && !(val <= target))  return false;
+            if (f.op === '>'   && !(val > target))   return false;
+            if (f.op === '<'   && !(val < target))   return false;
+            if (f.op === '='   && !(val === target))  return false;
+          }
+        } else {
+          const text = String(raw).toLowerCase();
+          const v = f.value.toLowerCase();
+          if (f.op === 'contains'   && !text.includes(v)) return false;
+          if (f.op === 'equals'     && text !== v)        return false;
+          if (f.op === 'not equals' && text === v)        return false;
+        }
+      }
+      return true;
+    });
+    updateMetaInfo();
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     META INFO
+  ───────────────────────────────────────────────────────── */
+  function formatCov(v) {
+    const n = Number(v);
+    return Number.isFinite(n) ? n.toFixed(2) : String(v ?? 'NA');
+  }
+
+  function updateMetaInfo() {
+    const proteinsCount = Number(state.appConfig?.proteins_count ?? state.proteins.length);
+    const pairsCount    = Number(state.appConfig?.pairs_count    ?? state.pairs.length);
+    document.getElementById('metaInfo').innerHTML =
+      `<span class="stat-val">${proteinsCount}</span>&nbsp;prot. &nbsp;·&nbsp; <span class="stat-val">${pairsCount}</span>&nbsp;paires`;
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     PLOT
+  ───────────────────────────────────────────────────────── */
+  function scaledSizes(values) {
+    const valid = values.filter(v => Number.isFinite(v));
+    if (!valid.length) return values.map(() => 7);
+    const min = Math.min(...valid), max = Math.max(...valid);
+    if (max - min < 1e-12) return values.map(() => 8);
+    return values.map(v => Number.isFinite(v) ? (4 + 14 * ((v - min) / (max - min))) : 4);
+  }
+
+  function renderPlot() {
+    const renderToken = ++state.plotNonce;
+    const xKey = document.getElementById('xMetric').value;
+    const yKey = document.getElementById('yMetric').value;
+    const cKey = document.getElementById('colorMetric').value;
+    const sKey = document.getElementById('sizeMetric').value;
+    const xLabel = metricDisplayName(xKey);
+    const yLabel = metricDisplayName(yKey);
+    const cLabel = metricDisplayName(cKey);
+
+    const isLightTheme = document.documentElement.classList.contains('light');
+    const plotBg   = isLightTheme ? '#ffffff' : '#0d1117';
+    const gridCol  = isLightTheme ? '#eaeef2' : '#21262d';
+    const zeroCol  = isLightTheme ? '#d0d7de' : '#30363d';
+    const tickCol  = isLightTheme ? '#57606a' : '#8b949e';
+    const loessCol = isLightTheme ? '#cf222e' : '#ff7b72';
+    const ciFill   = isLightTheme ? 'rgba(207,34,46,0.10)' : 'rgba(255,123,114,0.15)';
+    const ciEdge   = isLightTheme ? 'rgba(207,34,46,0.30)' : 'rgba(255,123,114,0.35)';
+    const ptDefault = isLightTheme ? 'rgba(9,105,218,0.55)' : 'rgba(56,139,253,0.55)';
+    const legendBg  = isLightTheme ? 'rgba(255,255,255,0.9)' : 'rgba(22,27,34,0.8)';
+
+    const rows   = state.filtered.filter(r => isNumeric(r[xKey]) && isNumeric(r[yKey]));
+    const x      = rows.map(r => r[xKey]);
+    const y      = rows.map(r => r[yKey]);
+    const colors = (cKey && cKey !== 'NONE')
+      ? rows.map(r => isNumeric(r[cKey]) ? r[cKey] : null)
+      : rows.map(() => ptDefault);
+    const sizeRaw = (sKey && sKey !== 'NONE') ? rows.map(r => isNumeric(r[sKey]) ? r[sKey] : NaN) : rows.map(() => 1);
+    const sizes   = scaledSizes(sizeRaw);
+    const wantsColorbar = !!(cKey && cKey !== 'NONE') && state.showLegend;
+
+    const showPts = document.getElementById('showPoints').checked;
+    const showLoess = document.getElementById('showLoess').checked;
+
+    const scatterTrace = {
+      type: 'scattergl',
+      mode: 'markers',
+      name: 'Paires',
+      showlegend: false,
+      visible: showPts,
+      x, y,
+      customdata: rows,
+      marker: {
+        size: sizes,
+        color: colors,
+        colorscale: (cKey && cKey !== 'NONE') ? 'Viridis' : undefined,
+        showscale: wantsColorbar,
+        opacity: showPts ? 0.7 : 0,
+        line: { width: 0.3, color: isLightTheme ? 'rgba(31,35,40,0.3)' : 'rgba(13,17,23,0.5)' },
+        colorbar: wantsColorbar
+          ? { title: cLabel, x: 1.02, xanchor: 'left', len: 0.85, thickness: 14,
+              bgcolor: 'rgba(0,0,0,0)', bordercolor: zeroCol, tickcolor: tickCol, tickfont: { color: tickCol, size: 10 } }
+          : undefined
+      },
+      hovertemplate:
+        `<b>%{customdata.pair_id}</b><br>` +
+        `query: %{customdata.query} (%{customdata.query_species})<br>` +
+        `target: %{customdata.target} (%{customdata.target_species})<br>` +
+        `MMseq2 pident: %{customdata.mmseq2_pident}<br>` +
+        `Needleman pident: %{customdata.nw_pident}<br>` +
+        `${xLabel}: %{x:.4f}<br>${yLabel}: %{y:.4f}<extra></extra>`
+    };
+
+    const layout = {
+      margin: { t: 36, r: wantsColorbar ? 70 : 36, b: 56, l: 64 },
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: plotBg,
+      font: { family: "'IBM Plex Sans', sans-serif", color: tickCol, size: 11 },
+      xaxis: {
+        title: { text: xLabel, font: { color: tickCol, size: 11 } },
+        gridcolor: gridCol, zerolinecolor: zeroCol,
+        tickcolor: zeroCol, tickfont: { color: tickCol, size: 10 }
+      },
+      yaxis: {
+        title: { text: yLabel, font: { color: tickCol, size: 11 } },
+        gridcolor: gridCol, zerolinecolor: zeroCol,
+        tickcolor: zeroCol, tickfont: { color: tickCol, size: 10 }
+      },
+      showlegend: state.showLegend,
+      legend: {
+        bgcolor: legendBg, bordercolor: zeroCol, borderwidth: 1,
+        font: { color: tickCol, size: 11 }
+      }
+    };
+
+    Plotly.newPlot('plot', [scatterTrace], layout, { responsive: true, displaylogo: false });
+
+    const plotEl = document.getElementById('plot');
+    plotEl.on('plotly_click', ev => {
+      if (!ev.points || !ev.points.length) return;
+      state.selected = ev.points[0].customdata;
+      renderDetails();
+    });
+
+    // Prevent legend clicks from toggling the size legend entry (make it non-clickable)
+    plotEl.on('plotly_legendclick', ev => {
+      try {
+        const trace = plotEl.data && plotEl.data[ev.curveNumber];
+        const name = trace && trace.name ? String(trace.name) : '';
+        if (name.startsWith('Taille —')) {
+          return false; // cancel default toggle
+        }
+      } catch (e) {
+        // ignore
+      }
+      return true;
+    });
+
+    if (!showLoess && !document.getElementById('showConfidence').checked) return;
+    if (renderToken !== state.plotNonce) return;
+
+    const loessFrac       = parseFloat(document.getElementById('loessFrac').value);
+    const loessIterations = parseInt(document.getElementById('loessIterations').value, 10);
+    const showConfidence  = document.getElementById('showConfidence').checked;
+    const ciMethod        = document.getElementById('ciMethod').value;
+    const confLevel       = Number(document.getElementById('confLevel').value || 95) / 100.0;
+    const confSamples     = Number(document.getElementById('confSamples').value || 200);
+
+    fetch('/api/loess', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        x, y,
+        frac: loessFrac,
+        iterations: loessIterations,
+        confidence: showConfidence,
+        conf_n: confSamples,
+        conf_level: confLevel,
+        ci_method: ciMethod,
+      })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (renderToken !== state.plotNonce) return;
+
+      // Update correlation stats
+      const pearsonText  = data.pearson  != null ? `r = ${Number(data.pearson).toFixed(3)}`  : 'r = NA';
+      const spearmanText = data.spearman != null ? `ρ = ${Number(data.spearman).toFixed(3)}` : 'ρ = NA';
+      const visibleProteins = new Set(rows.flatMap(r => [r.query, r.target])).size;
+      const nText = `${visibleProteins} prot. · ${rows.length} paires`;
+
+      document.getElementById('pearsonInfo').textContent  = pearsonText;
+      document.getElementById('spearmanInfo').textContent = spearmanText;
+      document.getElementById('nInfo').textContent        = nText;
+
+      if (data.error || !data.loess_x || !data.loess_x.length) return;
+
+      const overlayTraces = [];
+
+      // CI band — inserted FIRST so it sits under the LOESS line but above points
+      // (we'll use Plotly.addTraces with insertion index 0, after the scatter)
+      if (showConfidence && data.ci_bottom && data.ci_top && data.ci_x && data.ci_x.length) {
+        // Lower boundary (invisible, for fill reference)
+        overlayTraces.push({
+          x: data.ci_x, y: data.ci_bottom,
+          mode: 'lines', type: 'scatter',
+          line: { width: 0, color: 'transparent' },
+          hoverinfo: 'skip', showlegend: false, name: '',
+        });
+        // Upper boundary filled to lower
+        overlayTraces.push({
+          x: data.ci_x, y: data.ci_top,
+          mode: 'lines', type: 'scatter',
+          line: { width: 1, color: 'rgba(255,123,114,0.35)' },
+          fill: 'tonexty',
+          fillcolor: 'rgba(255,123,114,0.15)',
+          hoverinfo: 'skip', showlegend: false, name: '',
+        });
+      }
+
+      // LOESS line — topmost overlay
+      if (showLoess) {
+        overlayTraces.push({
+          x: data.loess_x, y: data.loess_y,
+          mode: 'lines', type: 'scattergl',
+          line: { color: '#ff7b72', width: 2.5 },
+          hoverinfo: 'skip',
+          name: `LOESS (f=${loessFrac.toFixed(2)})`,
+          showlegend: state.showLegend,
+        });
+        // Legend entry for marker size (hidden on plot, visible in legend).
+        // Only add it when a size metric is selected (not 'NONE').
+        if (sKey && sKey !== 'NONE') {
+          const sizeLegendName = `Taille — ${metricDisplayName(sKey)}`;
+          const repSize = (sizes && sizes.length) ? (sizes[Math.floor(sizes.length/2)] || 8) : 8;
+          const legendMarkerColor = isLightTheme ? 'rgba(31,35,40,0.95)' : 'rgba(230,237,243,0.95)';
+          overlayTraces.push({
+            x: [NaN], y: [NaN],
+            mode: 'markers', type: 'scattergl',
+            marker: { size: repSize, color: legendMarkerColor },
+            hoverinfo: 'skip',
+            name: sizeLegendName,
+            showlegend: state.showLegend,
+            visible: true,
+          });
+        }
+      }
+
+      if (overlayTraces.length) {
+        // Add AFTER scatter trace but still under point interaction — use indices len(existing)+0,1,...
+        Plotly.addTraces('plot', overlayTraces);
+      }
+    })
+    .catch(err => {
+      document.getElementById('pearsonInfo').textContent  = 'r = NA';
+      document.getElementById('spearmanInfo').textContent = 'ρ = NA';
+      console.error('LOESS error:', err);
+    });
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     LAYOUT TOGGLES
+  ───────────────────────────────────────────────────────── */
+  function applyLayoutToggles() {
+    const mainEl     = document.getElementById('mainArea');
+    const detailsEl  = document.getElementById('detailsWrap');
+
+    mainEl.classList.toggle('no-details', !state.showDetails);
+    detailsEl.classList.toggle('hidden', !state.showDetails);
+
+    document.getElementById('toggleDetails').classList.toggle('active', state.showDetails);
+    document.getElementById('toggleLegend').classList.toggle('active', state.showLegend);
+
+    setTimeout(() => { if (window.Plotly) Plotly.Plots.resize('plot'); }, 50);
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     DETAILS PANEL
+  ───────────────────────────────────────────────────────── */
+  function resolveProtein(acc) { return state.proteinMap[acc] || null; }
+  function safeText(v, fb = '') { return (v === undefined || v === null || v === '') ? fb : v; }
+
+  function stripNeedlemanReverseSection(text) {
+    if (!text) return '';
+    const marker = '\nReverse orientation:';
+    const idx = text.indexOf(marker);
+    return idx === -1 ? text : text.slice(0, idx).trimEnd();
+  }
+
+  function pdbPathForProtein(p) {
+    if (!p) return '';
+    return p.structure_pdb || p.structure_colabfold_pdb || '';
+  }
+
+  async function loadStructure(viewerId, pdbPath) {
+    const stage = state.stages[viewerId];
+    if (!stage) return;
+    stage.removeAllComponents();
+    if (!pdbPath) {
+      const c = document.getElementById(viewerId);
+      if (c) c.innerHTML = '<div style="padding:10px;color:#484f58;font-size:12px;">Structure 3D indisponible</div>';
+      return;
+    }
+    try {
+      const component = await stage.loadFile(`/api/pdb?path=${encodeURIComponent(pdbPath)}`, { ext: 'pdb' });
+      component.removeAllRepresentations();
+      component.addRepresentation('cartoon', { color: 'residueindex' });
+      component.addRepresentation('ball+stick', { sele: 'hetero and not water', visible: false });
+      component.autoView();
+    } catch (e) {
+      const c = document.getElementById(viewerId);
+      if (c) c.innerHTML = '<div style="padding:10px;color:#484f58;font-size:12px;">Impossible de charger la structure 3D</div>';
+    }
+  }
+
+  async function fetchText(path) {
+    if (!path) return '';
+    const r = await fetch(`/api/alignment?path=${encodeURIComponent(path)}`);
+    return r.ok ? await r.text() : '';
+  }
+
+  async function fetchFasta(path) {
+    if (!path) return '';
+    const r = await fetch(`/api/fasta?path=${encodeURIComponent(path)}`);
+    return r.ok ? await r.text() : '';
+  }
+
+  function escapeHtml(s) {
+    return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+  }
+
+  function isNumericVal(v) {
+    if (v === undefined || v === null || v === '') return false;
+    return Number.isFinite(Number(v));
+  }
+
+  async function renderDetails() {
+    const el = document.getElementById('detailsContent');
+    const r  = state.selected;
+    if (!r) { el.innerHTML = '<div class="details-empty">Cliquez sur un point pour afficher les détails.</div>'; return; }
+
+    const queryP  = resolveProtein(r.query);
+    const targetP = resolveProtein(r.target);
+
+    if (state.tab === 'summary') {
+      const [queryFasta, targetFasta] = await Promise.all([
+        fetchFasta(queryP?.sequence_fasta || ''),
+        fetchFasta(targetP?.sequence_fasta || '')
+      ]);
+      el.innerHTML = `
+        <div class="detail-grid">
+          <div class="protein-card">
+            <h3>Query — ${safeText(getTaxonLabel(queryP?.species_key) || r.query_species, 'NA')} / ${safeText(r.query)}</h3>
+            <div class="protein-meta">
+              <div><strong>Espèce:</strong> ${safeText(getTaxonLabel(queryP?.species_key) || r.query_species, 'NA')}</div>
+              <div><strong>Accession:</strong> ${safeText(r.query)}</div>
+              <div><strong>Nom:</strong> ${safeText(queryP?.protein_name, 'NA')}</div>
+              <div><strong>Gènes:</strong> ${safeText(queryP?.gene_names, 'NA')}</div>
+              <div><strong>Subunit:</strong> ${safeText(queryP?.subunit_type, 'NA')}</div>
+              <div><strong>Fonction:</strong> ${safeText(queryP?.annotations_function, 'NA')}</div>
+              <div><strong>GO:</strong> ${safeText(queryP?.annotations_go_terms, 'NA')}</div>
+            </div>
+            <div id="viewer-query" class="viewer"></div>
+            <pre>${queryFasta || 'FASTA non disponible'}</pre>
+          </div>
+          <div class="protein-card">
+            <h3>Target — ${safeText(getTaxonLabel(targetP?.species_key) || r.target_species, 'NA')} / ${safeText(r.target)}</h3>
+            <div class="protein-meta">
+              <div><strong>Espèce:</strong> ${safeText(getTaxonLabel(targetP?.species_key) || r.target_species, 'NA')}</div>
+              <div><strong>Accession:</strong> ${safeText(r.target)}</div>
+              <div><strong>Nom:</strong> ${safeText(targetP?.protein_name, 'NA')}</div>
+              <div><strong>Gènes:</strong> ${safeText(targetP?.gene_names, 'NA')}</div>
+              <div><strong>Subunit:</strong> ${safeText(targetP?.subunit_type, 'NA')}</div>
+              <div><strong>Fonction:</strong> ${safeText(targetP?.annotations_function, 'NA')}</div>
+              <div><strong>GO:</strong> ${safeText(targetP?.annotations_go_terms, 'NA')}</div>
+            </div>
+            <div id="viewer-target" class="viewer"></div>
+            <pre>${targetFasta || 'FASTA non disponible'}</pre>
+          </div>
+        </div>`;
+      state.stages['viewer-query']  = new NGL.Stage('viewer-query',  { backgroundColor: '#070d14' });
+      state.stages['viewer-target'] = new NGL.Stage('viewer-target', { backgroundColor: '#070d14' });
+      await loadStructure('viewer-query',  pdbPathForProtein(queryP));
+      await loadStructure('viewer-target', pdbPathForProtein(targetP));
+      return;
+    }
+
+    if (state.tab === 'mmseq2') {
+      const txt = await fetchText(r.mmseq2_alignment_file);
+      el.innerHTML = `<pre>${escapeHtml(txt || 'Alignment MMseqs2 indisponible')}</pre>`;
+      return;
+    }
+
+    if (state.tab === 'needleman') {
+      const txt = stripNeedlemanReverseSection(await fetchText(r.nw_alignment_file));
+      el.innerHTML = `
+        <div class="align-summary">
+          <strong>Needleman-Wunsch</strong> —
+          pident <strong>${safeText(r.nw_pident,'NA')}</strong> | qcov ${safeText(r.nw_qcov,'NA')} | tcov ${safeText(r.nw_tcov,'NA')} | score ${safeText(r.nw_score,'NA')}
+        </div>
+        <pre>${escapeHtml(txt || 'Alignment Needleman indisponible')}</pre>`;
+      return;
+    }
+
+    if (state.tab === 'tmalign') {
+      const txt = await fetchText(r.tm_alignment_file);
+      el.innerHTML = `
+        <div class="align-summary">
+          <strong>TM-Align</strong> —
+          TM-score <strong>${safeText(r.tm_score,'NA')}</strong> | len ${safeText(r.tm_l_align,'NA')} | id ${safeText(r.tm_id_align_percent,'NA')}%
+          &nbsp;·&nbsp; Reverse: TM-score <strong>${safeText(r.tm_score_reverse,'NA')}</strong> | len ${safeText(r.tm_l_align_reverse,'NA')} | id ${safeText(r.tm_id_align_percent_reverse,'NA')}%
+        </div>
+        <pre>${escapeHtml(txt || 'Alignment TM-align indisponible')}</pre>`;
+      return;
+    }
+
+    if (state.tab === 'foldseek') {
+      const txt = await fetchText(r.foldseek_alignment_file);
+      const fb = isNumericVal(r.foldseek_bits) ? ` | bits ${r.foldseek_bits}` : '';
+      const rb = isNumericVal(r.foldseek_bits_reverse) ? ` | bits ${r.foldseek_bits_reverse}` : '';
+      el.innerHTML = `
+        <div class="align-summary">
+          <strong>Foldseek</strong> —
+          TM-score <strong>${safeText(r.foldseek_tm_score,'NA')}</strong> | len ${safeText(r.foldseek_alnlen,'NA')} | id ${safeText(r.foldseek_fident,'NA')} | e-val ${safeText(r.foldseek_evalue,'NA')}${fb}
+          &nbsp;·&nbsp; Reverse: TM-score <strong>${safeText(r.foldseek_tm_score_reverse,'NA')}</strong> | len ${safeText(r.foldseek_alnlen_reverse,'NA')} | id ${safeText(r.foldseek_fident_reverse,'NA')} | e-val ${safeText(r.foldseek_evalue_reverse,'NA')}${rb}
+        </div>
+        <pre>${escapeHtml(txt || 'Alignment Foldseek indisponible')}</pre>`;
+      return;
+    }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     CI METHOD HELP TEXTS
+  ───────────────────────────────────────────────────────── */
+  const CI_HELP = {
+    pred:     "Intervalle de prédiction : couvre la dispersion réelle des points autour de la courbe LOESS (résidus ±kσ). Recommandé pour visualiser la variabilité.",
+    boot:     "Bootstrap : capture uniquement l'incertitude de la courbe moyenne. Souvent trop étroit si les données sont très dispersées.",
+    combined: "Combiné : somme quadratique de l'incertitude bootstrap et des résidus. Compromis recommandé.",
+  };
+
+  /* ─────────────────────────────────────────────────────────
+     EVENT BINDING
+  ───────────────────────────────────────────────────────── */
+  function bindEvents() {
+    // Theme toggle
+    let isLight = true;
+    document.documentElement.classList.add('light');
+    document.getElementById('toggleTheme').addEventListener('click', () => {
+      isLight = !isLight;
+      document.documentElement.classList.toggle('light', isLight);
+      const btn = document.getElementById('toggleTheme');
+      btn.textContent = isLight ? '🌙 Thème sombre' : '☀ Thème clair';
+      btn.classList.toggle('active', isLight);
+      renderPlot();
+    });
+
+    // Top-bar toggles
+    document.getElementById('toggleDetails').addEventListener('click', () => {
+      state.showDetails = !state.showDetails; applyLayoutToggles();
+    });
+    document.getElementById('toggleLegend').addEventListener('click', () => {
+      state.showLegend = !state.showLegend; applyLayoutToggles(); renderPlot();
+    });
+
+    // Axes
+    ['xMetric','yMetric','colorMetric','sizeMetric'].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => { applyFilters(); renderPlot(); });
+    });
+
+    // LOESS
+    document.getElementById('showLoess').addEventListener('change', renderPlot);
+    document.getElementById('showPoints').addEventListener('change', renderPlot);
+    document.getElementById('loessFrac').addEventListener('input', e => {
+      document.getElementById('loessFracValue').textContent = parseFloat(e.target.value).toFixed(2);
+    });
+    document.getElementById('loessIterations').addEventListener('input', e => {
+      document.getElementById('loessIterationsValue').textContent = e.target.value;
+    });
+    document.getElementById('loessFrac').addEventListener('change', renderPlot);
+    document.getElementById('loessIterations').addEventListener('change', renderPlot);
+
+    // CI
+    const showCIEl = document.getElementById('showConfidence');
+    const ciSection = document.getElementById('ciSection');
+    showCIEl.addEventListener('change', () => {
+      ciSection.classList.toggle('disabled', !showCIEl.checked);
+      renderPlot();
+    });
+    ciSection.classList.add('disabled'); // start disabled
+
+    document.getElementById('ciMethod').addEventListener('change', e => {
+      document.getElementById('ciMethodHelp').textContent = CI_HELP[e.target.value] || '';
+      renderPlot();
+    });
+    document.getElementById('confLevel').addEventListener('change', renderPlot);
+    document.getElementById('confSamples').addEventListener('change', renderPlot);
+
+    // Filters
+    document.getElementById('addFilter').addEventListener('click', () => addFilterRow('emb_mean_raw'));
+    document.getElementById('clearFilters').addEventListener('click', () => {
+      document.getElementById('filters').innerHTML = '';
+      state.filters = [];
+    });
+    document.getElementById('applyFilters').addEventListener('click', () => { applyFilters(); renderPlot(); });
+    document.getElementById('resetView').addEventListener('click', () => { applyFilters(); renderPlot(); });
+
+    // Quick filters auto-apply
+    ['speciesRelation','filterQuerySpecies','filterTargetSpecies','filterQueryProtein','filterTargetProtein','coverageThreshold'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', () => { applyFilters(); renderPlot(); });
+    });
+
+    // Detail tabs
+    document.querySelectorAll('.dtab[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.tab = btn.dataset.tab;
+        document.querySelectorAll('.dtab[data-tab]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderDetails();
+      });
+    });
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     INIT
+  ───────────────────────────────────────────────────────── */
+  async function init() {
+    document.documentElement.classList.add('light');
+    const themeBtn = document.getElementById('toggleTheme');
+    if (themeBtn) {
+      themeBtn.textContent = '🌙 Thème sombre';
+      themeBtn.classList.add('active');
+    }
+
+    const data = await loadData();
+    state.pairs    = data.pairs    || [];
+    state.proteins = data.proteins || [];
+    state.appConfig = window.APP_DATA?.metadata || {};
+    state.proteinMap = Object.fromEntries(state.proteins.map(p => [p.accession, p]));
+
+    state.metrics = inferMetrics(state.pairs);
+    state.numericColumns = new Set([...state.metrics, ...AXIS_METRIC_VALUES]);
+
+    setupControls();
+    addFilterRow('emb_mean_raw');
+    applyFilters();
+    applyLayoutToggles();
+    renderPlot();
+    bindEvents();
+    updateMetaInfo();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>
+</body>
+</html>

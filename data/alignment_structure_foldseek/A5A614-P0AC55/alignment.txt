@@ -1,0 +1,32 @@
+forward:
+query: A5A614
+target: P0AC55
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: P0AC55
+target: A5A614
+query_length: 112
+target_length: 57
+alntmscore: 5.754E-01
+qtmscore: 1.153E-01
+ttmscore: 2.148E-01
+aligned_length: 15
+fident: 0.333
+qcov: 0.134
+tcov: 0.263
+evalue: 2.742E+00
+
+qaln:
+DQLDEVIDIVSKAAY
+
+taln:
+ERIDIVLDILVAGDY
+
+alignment_blocks:
+DQLDEVIDIVSKAAY
+   | | ||     |
+ERIDIVLDILVAGDY
+

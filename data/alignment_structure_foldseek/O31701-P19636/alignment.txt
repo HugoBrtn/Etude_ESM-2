@@ -1,0 +1,60 @@
+forward:
+query: O31701
+target: P19636
+query_length: 199
+target_length: 295
+alntmscore: 2.692E-01
+qtmscore: 1.159E-01
+ttmscore: 8.383E-02
+aligned_length: 84
+fident: 0.119
+qcov: 0.337
+tcov: 0.241
+evalue: 2.196E+00
+
+qaln:
+KHVNVLLAG-GAS------RRFGEPKAFVKWKGRMLYECAKEALGE--QTVIIS--RPEFIDRFQENGENE------VYQDAEP
+
+taln:
+DVQVVISDGLSTDAITVNYEEI-LPP---------LMAGLKQAGLKVGTPFFVRYGRVKIEDQIGEI---LGAKVVILLVGERP
+
+alignment_blocks:
+KHVNVLLAG-GAS------RRFGEPKAFVKWKGRMLYECAKEALGE--QTVIIS--RPEFIDRFQENGENE------VYQ
+    |   |               |          |    | |             |    |   |              
+DVQVVISDGLSTDAITVNYEEI-LPP---------LMAGLKQAGLKVGTPFFVRYGRVKIEDQIGEI---LGAKVVILLV
+
+DAEP
+   |
+GERP
+
+
+
+reverse:
+query: P19636
+target: O31701
+query_length: 295
+target_length: 199
+alntmscore: 2.692E-01
+qtmscore: 8.383E-02
+ttmscore: 1.159E-01
+aligned_length: 84
+fident: 0.119
+qcov: 0.241
+tcov: 0.337
+evalue: 1.825E+00
+
+qaln:
+DVQVVISDGLSTDAITVNYEEI-LPP---------LMAGLKQAGLKVGTPFFVRYGRVKIEDQIGEI---LGAKVVILLVGERP
+
+taln:
+KHVNVLLAG-GAS------RRFGEPKAFVKWKGRMLYECAKEALGE--QTVIIS--RPEFIDRFQENGENE------VYQDAEP
+
+alignment_blocks:
+DVQVVISDGLSTDAITVNYEEI-LPP---------LMAGLKQAGLKVGTPFFVRYGRVKIEDQIGEI---LGAKVVILLV
+    |   |               |          |    | |             |    |   |              
+KHVNVLLAG-GAS------RRFGEPKAFVKWKGRMLYECAKEALGE--QTVIIS--RPEFIDRFQENGENE------VYQ
+
+GERP
+   |
+DAEP
+

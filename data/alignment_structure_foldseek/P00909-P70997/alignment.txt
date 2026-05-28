@@ -1,0 +1,56 @@
+forward:
+query: P00909
+target: P70997
+query_length: 453
+target_length: 691
+alntmscore: 2.713E-01
+qtmscore: 5.020E-02
+ttmscore: 3.375E-02
+aligned_length: 94
+fident: 0.138
+qcov: 0.163
+tcov: 0.119
+evalue: 9.757E-01
+
+qaln:
+LAKIVADKAIWVEARKQQQPLASFQN-------EVQPSTRHFYDALQGARTAFILECKKASPSKGVIR-------------DDFDPARIAAIYK
+
+taln:
+LTLKTVRAFIFLGAFAALAAAAVFMTVILIAKYQGAPS-------VQ-VPQSTIL----YASDGSKLGETNYGEKRYWVPLKDMNPTIVKATVA
+
+alignment_blocks:
+LAKIVADKAIWVEARKQQQPLASFQN-------EVQPSTRHFYDALQGARTAFILECKKASPSKGVIR------------
+|        |   |       | |            ||        |      ||                         
+LTLKTVRAFIFLGAFAALAAAAVFMTVILIAKYQGAPS-------VQ-VPQSTIL----YASDGSKLGETNYGEKRYWVP
+
+-DDFDPARIAAIYK
+  |  |    |   
+LKDMNPTIVKATVA
+
+
+
+reverse:
+query: P70997
+target: P00909
+query_length: 691
+target_length: 453
+alntmscore: 2.250E-01
+qtmscore: 1.835E-02
+ttmscore: 2.775E-02
+aligned_length: 63
+fident: 0.126
+qcov: 0.074
+tcov: 0.110
+evalue: 2.643E+00
+
+qaln:
+KYQGAPS-------VQ-VPQSTIL----YASDGSKLGETNYGEKRYWVPLKDMNPTIVKATVA
+
+taln:
+QNEVQPSTRHFYDALQGARTAFILECKKASPSKGVIR-------------DDFDPARIAAIYK
+
+alignment_blocks:
+KYQGAPS-------VQ-VPQSTIL----YASDGSKLGETNYGEKRYWVPLKDMNPTIVKATVA
+     ||        |      ||                           |  |    |   
+QNEVQPSTRHFYDALQGARTAFILECKKASPSKGVIR-------------DDFDPARIAAIYK
+

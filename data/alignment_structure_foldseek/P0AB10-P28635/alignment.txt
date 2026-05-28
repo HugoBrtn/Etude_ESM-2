@@ -1,0 +1,60 @@
+forward:
+query: P0AB10
+target: P28635
+query_length: 187
+target_length: 271
+alntmscore: 3.221E-01
+qtmscore: 1.355E-01
+ttmscore: 9.761E-02
+aligned_length: 118
+fident: 0.093
+qcov: 0.578
+tcov: 0.251
+evalue: 9.541E-01
+
+qaln:
+LAGCSSGEINKNYYQLPVVQSGTQSTASQGNRLLWVEQVTVPDYLAGNGVVYQTSDVKYVIANNNLWASPLDQQLRNTLVANLSTQLP---GWVVASQPLGSA-------QDTLNVTV
+
+taln:
+LVGCGQDEKDPNH------------------IKV----GVIV------G---------------------AEQQVAEVAQKVAKDKYGLDVELVTFNDYVLPNEALSKGDID-ANAFQ
+
+alignment_blocks:
+LAGCSSGEINKNYYQLPVVQSGTQSTASQGNRLLWVEQVTVPDYLAGNGVVYQTSDVKYVIANNNLWASPLDQQLRNTLV
+| ||   |   |                                    |                       ||      
+LVGCGQDEKDPNH------------------IKV----GVIV------G---------------------AEQQVAEVAQ
+
+ANLSTQLP---GWVVASQPLGSA-------QDTLNVTV
+             |                 |  |   
+KVAKDKYGLDVELVTFNDYVLPNEALSKGDID-ANAFQ
+
+
+
+reverse:
+query: P28635
+target: P0AB10
+query_length: 271
+target_length: 187
+alntmscore: 3.081E-01
+qtmscore: 9.508E-02
+ttmscore: 1.315E-01
+aligned_length: 118
+fident: 0.084
+qcov: 0.251
+tcov: 0.578
+evalue: 8.491E-01
+
+qaln:
+LVGCGQDEKDPNH------------------IKV----GVIVGA---------------------------EQQVAEVAQKVAKDKYGLDVELVTFNDYVLPNEALSKGDID-ANAFQ
+
+taln:
+LAGCSSGEINKNYYQLPVVQSGTQSTASQGNRLLWVEQVTVPDYLAGNGVVYQTSDVKYVIANNNLWASPLDQQLRNTLVANLSTQLP---GWVVASQPLGSA-------QDTLNVTV
+
+alignment_blocks:
+LVGCGQDEKDPNH------------------IKV----GVIVGA---------------------------EQQVAEVAQ
+| ||   |   |                                                            ||      
+LAGCSSGEINKNYYQLPVVQSGTQSTASQGNRLLWVEQVTVPDYLAGNGVVYQTSDVKYVIANNNLWASPLDQQLRNTLV
+
+KVAKDKYGLDVELVTFNDYVLPNEALSKGDID-ANAFQ
+             |                 |  |   
+ANLSTQLP---GWVVASQPLGSA-------QDTLNVTV
+

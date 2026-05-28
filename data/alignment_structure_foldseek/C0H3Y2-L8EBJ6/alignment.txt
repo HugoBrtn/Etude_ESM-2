@@ -1,0 +1,12 @@
+forward:
+query: C0H3Y2
+target: L8EBJ6
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: L8EBJ6
+target: C0H3Y2
+
+No alignment returned by Foldseek

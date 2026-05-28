@@ -1,0 +1,32 @@
+forward:
+query: P37902
+target: Q02169
+query_length: 302
+target_length: 189
+alntmscore: 3.261E-01
+qtmscore: 7.232E-02
+ttmscore: 1.070E-01
+aligned_length: 32
+fident: 0.250
+qcov: 0.103
+tcov: 0.148
+evalue: 5.846E-01
+
+qaln:
+KAVVVTSGTTS-EVLLNKLNEEQKMNMRIISA
+
+taln:
+KPLILASQSPRRKELLDLL---QLPYS-IIVS
+
+alignment_blocks:
+KAVVVTSGTTS-EVLLNKLNEEQKMNMRIISA
+|     |       ||  |   |     ||  
+KPLILASQSPRRKELLDLL---QLPYS-IIVS
+
+
+
+reverse:
+query: Q02169
+target: P37902
+
+No alignment returned by Foldseek

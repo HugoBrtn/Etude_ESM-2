@@ -1,0 +1,32 @@
+forward:
+query: O31957
+target: O34380
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: O34380
+target: O31957
+query_length: 124
+target_length: 156
+alntmscore: 4.571E-01
+qtmscore: 9.039E-02
+ttmscore: 7.539E-02
+aligned_length: 23
+fident: 0.086
+qcov: 0.153
+tcov: 0.147
+evalue: 2.995E+00
+
+qaln:
+ELVESGIE----GLKDIILKITG
+
+taln:
+DVASEFSDDIAAGKLKVLADWMG
+
+alignment_blocks:
+ELVESGIE----GLKDIILKITG
+            |         |
+DVASEFSDDIAAGKLKVLADWMG
+

@@ -1,0 +1,52 @@
+forward:
+query: O34533
+target: O68260
+query_length: 126
+target_length: 92
+alntmscore: 2.687E-01
+qtmscore: 1.407E-01
+ttmscore: 1.645E-01
+aligned_length: 65
+fident: 0.138
+qcov: 0.421
+tcov: 0.652
+evalue: 1.208E+00
+
+qaln:
+SVEA-TLEVIG--GKW--------KCVILCH-LTHGKKRTSELKRLMPNITQKMLTQQLRELEAD
+
+taln:
+VAEAIDLELLDKRTHPRLRKPMLEKYFAAIQRIVNSQLEPAVKYQL-----VKLHTERAEYLKEE
+
+alignment_blocks:
+SVEA-TLEVIG--GKW--------KCVILCH-LTHGKKRTSELKRLMPNITQKMLTQQLRELEAD
+  ||  ||                |                    |      |  |     |   
+VAEAIDLELLDKRTHPRLRKPMLEKYFAAIQRIVNSQLEPAVKYQL-----VKLHTERAEYLKEE
+
+
+
+reverse:
+query: O68260
+target: O34533
+query_length: 92
+target_length: 126
+alntmscore: 3.509E-01
+qtmscore: 2.158E-01
+ttmscore: 1.673E-01
+aligned_length: 63
+fident: 0.095
+qcov: 0.554
+tcov: 0.405
+evalue: 1.958E+00
+
+qaln:
+VAEAIDLELLDKRTHPRLRKPMLEKYFAAIQRIVNS------------QLEPAVKYQLVKLHT
+
+taln:
+SVEA-TLEVIG--GKW--------KCVILCH-LTHGKKRTSELKRLMPNITQKMLTQQLRELE
+
+alignment_blocks:
+VAEAIDLELLDKRTHPRLRKPMLEKYFAAIQRIVNS------------QLEPAVKYQLVKLHT
+  ||  ||                |                               |      
+SVEA-TLEVIG--GKW--------KCVILCH-LTHGKKRTSELKRLMPNITQKMLTQQLRELE
+

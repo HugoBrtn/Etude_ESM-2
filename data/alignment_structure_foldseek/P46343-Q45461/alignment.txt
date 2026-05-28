@@ -1,0 +1,32 @@
+forward:
+query: P46343
+target: Q45461
+query_length: 319
+target_length: 217
+alntmscore: 5.132E-01
+qtmscore: 9.102E-02
+ttmscore: 1.298E-01
+aligned_length: 66
+fident: 0.151
+qcov: 0.135
+tcov: 0.304
+evalue: 1.597E+00
+
+qaln:
+ESFQIADRLLGSLLALIR----------KGIEIS------------ERDVIY-AIKMAKKNELEYF
+
+taln:
+LFFYSVLPILRNTYTGIRGVNKNLLESGKGIGMTPAEQVRLVELPLAAPVIMAGIRTSTIYLIGWA
+
+alignment_blocks:
+ESFQIADRLLGSLLALIR----------KGIEIS------------ERDVIY-AIKMAKKNELEYF
+  |      |      ||          |||                  ||   |           
+LFFYSVLPILRNTYTGIRGVNKNLLESGKGIGMTPAEQVRLVELPLAAPVIMAGIRTSTIYLIGWA
+
+
+
+reverse:
+query: Q45461
+target: P46343
+
+No alignment returned by Foldseek

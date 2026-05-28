@@ -1,0 +1,32 @@
+forward:
+query: O31850
+target: O34932
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: O34932
+target: O31850
+query_length: 197
+target_length: 304
+alntmscore: 5.633E-01
+qtmscore: 1.140E-01
+ttmscore: 7.731E-02
+aligned_length: 30
+fident: 0.266
+qcov: 0.137
+tcov: 0.099
+evalue: 1.125E+00
+
+qaln:
+IGLTGGIASGKSTVANML---IEKGITVID
+
+taln:
+VLLKGPTGSGKTKLAETLSSYFHKPMHSVN
+
+alignment_blocks:
+IGLTGGIASGKSTVANML---IEKGITVID
+  | |   |||   |  |     |      
+VLLKGPTGSGKTKLAETLSSYFHKPMHSVN
+

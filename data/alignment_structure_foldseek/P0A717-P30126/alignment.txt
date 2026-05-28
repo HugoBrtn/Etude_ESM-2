@@ -1,0 +1,52 @@
+forward:
+query: P0A717
+target: P30126
+query_length: 315
+target_length: 201
+alntmscore: 3.585E-01
+qtmscore: 1.101E-01
+ttmscore: 1.575E-01
+aligned_length: 71
+fident: 0.267
+qcov: 0.216
+tcov: 0.289
+evalue: 4.725E-01
+
+qaln:
+DCVLVDDMIDTGGTLCKAAEALKERGAKRVFAYATHP--IFSGNAANNLRNSVIDEVVVCDTIPLSD-EIK
+
+taln:
+ILLAREN-FGCGSSREHAPWALTDYGFKVVIA--PSFADIFYGNSFNN---QLL--PVK-----LSDAEVD
+
+alignment_blocks:
+DCVLVDDMIDTGGTLCKAAEALKERGAKRVFAYATHP--IFSGNAANNLRNSVIDEVVVCDTIPLSD-EIK
+           |     |  ||   | | | |       || ||  ||         |      ||| |  
+ILLAREN-FGCGSSREHAPWALTDYGFKVVIA--PSFADIFYGNSFNN---QLL--PVK-----LSDAEVD
+
+
+
+reverse:
+query: P30126
+target: P0A717
+query_length: 201
+target_length: 315
+alntmscore: 3.585E-01
+qtmscore: 1.575E-01
+ttmscore: 1.101E-01
+aligned_length: 71
+fident: 0.267
+qcov: 0.289
+tcov: 0.216
+evalue: 3.813E-01
+
+qaln:
+ILLAREN-FGCGSSREHAPWALTDYGFKVVIA--PSFADIFYGNSFNN---QLL--PVK-----LSDAEVD
+
+taln:
+DCVLVDDMIDTGGTLCKAAEALKERGAKRVFAYATHP--IFSGNAANNLRNSVIDEVVVCDTIPLSD-EIK
+
+alignment_blocks:
+ILLAREN-FGCGSSREHAPWALTDYGFKVVIA--PSFADIFYGNSFNN---QLL--PVK-----LSDAEVD
+           |     |  ||   | | | |       || ||  ||         |      ||| |  
+DCVLVDDMIDTGGTLCKAAEALKERGAKRVFAYATHP--IFSGNAANNLRNSVIDEVVVCDTIPLSD-EIK
+

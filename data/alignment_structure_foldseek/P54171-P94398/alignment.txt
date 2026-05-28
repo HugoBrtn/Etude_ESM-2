@@ -1,0 +1,52 @@
+forward:
+query: P54171
+target: P94398
+query_length: 257
+target_length: 304
+alntmscore: 3.595E-01
+qtmscore: 6.160E-02
+ttmscore: 5.214E-02
+aligned_length: 59
+fident: 0.169
+qcov: 0.195
+tcov: 0.141
+evalue: 2.571E+00
+
+qaln:
+RPSEHTIKTAKQLSKELNMPYCGRNKQTVEHL-------LKSAE--RDLLVVGKERFEL
+
+taln:
+VLKRPDEKAVTETAYE--------NPRFVEDLARLIAADLFELEWVSA--------FEI
+
+alignment_blocks:
+RPSEHTIKTAKQLSKELNMPYCGRNKQTVEHL-------LKSAE--RDLLVVGKERFEL
+       |       |        |   || |       |   |            || 
+VLKRPDEKAVTETAYE--------NPRFVEDLARLIAADLFELEWVSA--------FEI
+
+
+
+reverse:
+query: P94398
+target: P54171
+query_length: 304
+target_length: 257
+alntmscore: 3.595E-01
+qtmscore: 5.214E-02
+ttmscore: 6.160E-02
+aligned_length: 57
+fident: 0.192
+qcov: 0.141
+tcov: 0.195
+evalue: 2.477E+00
+
+qaln:
+VLKRPDEKAVTETAYE--------NPRFVEDLARLIAADLFELE----WV--SAFEI
+
+taln:
+RPSEHTIKTAKQLSKELNMPYCGRNKQTVEHL-------LKSAERDLLVVGKERFEL
+
+alignment_blocks:
+VLKRPDEKAVTETAYE--------NPRFVEDLARLIAADLFELE----WV--SAFEI
+       |       |        |   || |       |   |     |    || 
+RPSEHTIKTAKQLSKELNMPYCGRNKQTVEHL-------LKSAERDLLVVGKERFEL
+

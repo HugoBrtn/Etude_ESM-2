@@ -1,0 +1,32 @@
+forward:
+query: P0A6F9
+target: P69816
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: P69816
+target: P0A6F9
+query_length: 106
+target_length: 97
+alntmscore: 7.924E-01
+qtmscore: 6.891E-02
+ttmscore: 7.501E-02
+aligned_length: 8
+fident: 0.000
+qcov: 0.075
+tcov: 0.082
+evalue: 3.081E+00
+
+qaln:
+ETQGSIGL
+
+taln:
+SEKIDNEE
+
+alignment_blocks:
+ETQGSIGL
+        
+SEKIDNEE
+

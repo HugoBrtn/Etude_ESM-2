@@ -1,0 +1,56 @@
+forward:
+query: P06961
+target: P29012
+query_length: 412
+target_length: 356
+alntmscore: 3.220E-01
+qtmscore: 3.691E-02
+ttmscore: 4.183E-02
+aligned_length: 57
+fident: 0.140
+qcov: 0.087
+tcov: 0.154
+evalue: 3.410E+00
+
+qaln:
+PLRVLRVARF----------AAR-------YAHLG----FRIADETLALMREMTHAG
+
+taln:
+NLSIVRQAATHARVWSVVKANAYGHGIERIWSAIGATDGFALLN--LEEAITLRERG
+
+alignment_blocks:
+PLRVLRVARF----------AAR-------YAHLG----FRIADETLALMREMTHAG
+ |   | |             |            |    |      |         |
+NLSIVRQAATHARVWSVVKANAYGHGIERIWSAIGATDGFALLN--LEEAITLRERG
+
+
+
+reverse:
+query: P29012
+target: P06961
+query_length: 356
+target_length: 412
+alntmscore: 2.290E-01
+qtmscore: 5.759E-02
+ttmscore: 5.137E-02
+aligned_length: 121
+fident: 0.082
+qcov: 0.337
+tcov: 0.160
+evalue: 1.881E+00
+
+qaln:
+LEEAITL-RERGWKGPILMLEGFFHAQDLEIYDQHRLTTCVHSNWQLKALQNARLKAPLDIYLKVNSGMNRLGFQPDRVLTVWQQLRAMANVGEMTLMSHFAEAEHPDGISGAMARIEQAA
+
+taln:
+LRVARFAARYAHLGFRI-------ADETLALMREMT------HAGELEH------------------------LTPER---VWKETE--------------SALTTRNP-QVFFQVLRDCG
+
+alignment_blocks:
+LEEAITL-RERGWKGPILMLEGFFHAQDLEIYDQHRLTTCVHSNWQLKALQNARLKAPLDIYLKVNSGMNRLGFQPDRVL
+|  |    |       |           |                 |                            | |  
+LRVARFAARYAHLGFRI-------ADETLALMREMT------HAGELEH------------------------LTPER--
+
+TVWQQLRAMANVGEMTLMSHFAEAEHPDGISGAMARIEQAA
+ ||                                      
+-VWKETE--------------SALTTRNP-QVFFQVLRDCG
+

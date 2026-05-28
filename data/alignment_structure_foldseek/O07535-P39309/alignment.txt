@@ -1,0 +1,32 @@
+forward:
+query: O07535
+target: P39309
+query_length: 165
+target_length: 108
+alntmscore: 3.444E-01
+qtmscore: 7.120E-02
+ttmscore: 1.022E-01
+aligned_length: 26
+fident: 0.346
+qcov: 0.127
+tcov: 0.241
+evalue: 2.055E+00
+
+qaln:
+SEARQIAAILGGMVY-----KPQALE
+
+taln:
+GGYYLINQHTLGLVYHISMVSPQALE
+
+alignment_blocks:
+SEARQIAAILGGMVY-----KPQALE
+     |     | ||      |||||
+GGYYLINQHTLGLVYHISMVSPQALE
+
+
+
+reverse:
+query: P39309
+target: O07535
+
+No alignment returned by Foldseek

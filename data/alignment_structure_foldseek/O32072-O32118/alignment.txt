@@ -1,0 +1,32 @@
+forward:
+query: O32072
+target: O32118
+query_length: 103
+target_length: 108
+alntmscore: 3.472E-01
+qtmscore: 8.333E-02
+ttmscore: 8.190E-02
+aligned_length: 25
+fident: 0.120
+qcov: 0.155
+tcov: 0.231
+evalue: 3.829E+00
+
+qaln:
+QAVHIRM---------GDIPEKMET
+
+taln:
+EMQYIDIHEPPDNEHAKELAEKIRN
+
+alignment_blocks:
+QAVHIRM---------GDIPEKMET
+    |               ||   
+EMQYIDIHEPPDNEHAKELAEKIRN
+
+
+
+reverse:
+query: O32118
+target: O32072
+
+No alignment returned by Foldseek

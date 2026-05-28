@@ -1,0 +1,12 @@
+forward:
+query: P54396
+target: P54534
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: P54534
+target: P54396
+
+No alignment returned by Foldseek

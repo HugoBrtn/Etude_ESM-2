@@ -1,0 +1,32 @@
+forward:
+query: C0H412
+target: O06976
+
+No alignment returned by Foldseek
+
+
+reverse:
+query: O06976
+target: C0H412
+query_length: 85
+target_length: 71
+alntmscore: 5.327E-01
+qtmscore: 1.431E-01
+ttmscore: 1.704E-01
+aligned_length: 23
+fident: 0.391
+qcov: 0.271
+tcov: 0.282
+evalue: 3.415E-01
+
+qaln:
+GTEVTLIAQGEDEQEALEKLAAY
+
+taln:
+GKKFVV---KEDEEAVLEKIAAF
+
+alignment_blocks:
+GTEVTLIAQGEDEQEALEKLAAY
+|         |||   ||| || 
+GKKFVV---KEDEEAVLEKIAAF
+
