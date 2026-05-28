@@ -1,0 +1,10 @@
+name: etude_esm2
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - flask
+  - numpy
+  - scipy
+  - statsmodels

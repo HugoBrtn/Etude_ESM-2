@@ -70,6 +70,13 @@ def _safe_read_json(path: Path) -> dict:
         return {}
 
 
+def _relative_to_root(root_dir: Path, path: Path) -> str:
+    try:
+        return path.resolve().relative_to(root_dir.resolve()).as_posix()
+    except Exception:
+        return path.resolve().as_posix()
+
+
 def _fasta_length(path: Path) -> int | None:
     if not path.exists():
         return None
@@ -324,11 +331,11 @@ def _build_proteins_global_csv(data_dir: Path, global_dir: Path) -> Path:
                     "has_sequence": "1" if fasta_path.exists() else "0",
                     "has_structure": "1" if pdb_path.exists() or colabfold_path.exists() else "0",
                     "has_embedding": "1" if emb_path.exists() else "0",
-                    "sequence_fasta": str(fasta_path) if fasta_path.exists() else "",
-                    "structure_pdb": str(pdb_path) if pdb_path.exists() else "",
-                    "structure_colabfold_pdb": str(colabfold_path) if colabfold_path.exists() else "",
-                    "embedding_file": str(emb_path) if emb_path.exists() else "",
-                    "metadata_file": str(protein_dir / "metadata.json") if (protein_dir / "metadata.json").exists() else "",
+                    "sequence_fasta": _relative_to_root(data_dir.parent, fasta_path) if fasta_path.exists() else "",
+                    "structure_pdb": _relative_to_root(data_dir.parent, pdb_path) if pdb_path.exists() else "",
+                    "structure_colabfold_pdb": _relative_to_root(data_dir.parent, colabfold_path) if colabfold_path.exists() else "",
+                    "embedding_file": _relative_to_root(data_dir.parent, emb_path) if emb_path.exists() else "",
+                    "metadata_file": _relative_to_root(data_dir.parent, protein_dir / "metadata.json") if (protein_dir / "metadata.json").exists() else "",
                 }
             )
 
@@ -472,7 +479,7 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                     align_txt = mmseq_dir / pair_folder / "alignment.txt.gz"
                     if not align_txt.exists():
                         align_txt = mmseq_dir / pair_folder / "alignment.txt"
-                    row["mmseq2_alignment_file"] = str(align_txt) if align_txt.exists() else ""
+                    row["mmseq2_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
                     row["has_mmseq2"] = "1"
                 else:
                     row["mmseq2_alignment_file"] = ""
@@ -500,7 +507,7 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
             align_txt = pair_dir / "alignment.txt.gz"
             if not align_txt.exists():
                 align_txt = pair_dir / "alignment.txt"
-            row["mmseq2_alignment_file"] = str(align_txt) if align_txt.exists() else ""
+            row["mmseq2_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
             row["has_mmseq2"] = "1"
             row["updated_at"] = datetime.now().isoformat()
 
@@ -526,7 +533,7 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                 align_txt = nw_dir / pair_folder / "alignment.txt.gz"
                 if not align_txt.exists():
                     align_txt = nw_dir / pair_folder / "alignment.txt"
-                row["nw_alignment_file"] = str(align_txt) if align_txt.exists() else ""
+                row["nw_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
                 row["has_needleman"] = "1"
                 row["updated_at"] = datetime.now().isoformat()
     elif nw_dir.exists():
@@ -549,7 +556,7 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
             align_txt = pair_dir / "alignment.txt.gz"
             if not align_txt.exists():
                 align_txt = pair_dir / "alignment.txt"
-            row["nw_alignment_file"] = str(align_txt) if align_txt.exists() else ""
+            row["nw_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
             row["has_needleman"] = "1"
             row["updated_at"] = datetime.now().isoformat()
 
@@ -578,7 +585,7 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                 align_txt = tm_dir / pair_folder / "alignment.txt.gz"
                 if not align_txt.exists():
                     align_txt = tm_dir / pair_folder / "alignment.txt"
-                row["tm_alignment_file"] = str(align_txt) if align_txt.exists() else ""
+                row["tm_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
                 row["has_tmalign"] = "1"
                 row["updated_at"] = datetime.now().isoformat()
     elif tm_dir.exists():
@@ -603,7 +610,7 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
             align_txt = pair_dir / "alignment.txt.gz"
             if not align_txt.exists():
                 align_txt = pair_dir / "alignment.txt"
-            row["tm_alignment_file"] = str(align_txt) if align_txt.exists() else ""
+            row["tm_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
             row["has_tmalign"] = "1"
             row["updated_at"] = datetime.now().isoformat()
 
@@ -648,7 +655,7 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
 
             align_txt = pair_dir / "alignment.txt"
             if align_txt.exists():
-                row["foldseek_alignment_file"] = str(align_txt)
+                row["foldseek_alignment_file"] = _relative_to_root(data_dir.parent, align_txt)
                 if row0 or row_rev:
                     row["has_foldseek"] = "1"
             row["updated_at"] = datetime.now().isoformat()
@@ -840,8 +847,8 @@ def export_ui_data_js(root_dir: Path) -> Path:
         "metadata": {
             "proteins_count": len(proteins_rows),
             "pairs_count": len(pairs_rows),
-            "source_proteins_csv": str(proteins_csv),
-            "source_pairs_csv": str(pairs_csv),
+            "source_proteins_csv": _relative_to_root(root_dir, proteins_csv),
+            "source_pairs_csv": _relative_to_root(root_dir, pairs_csv),
             "mmseq2_coverage_mode": os.environ.get("MMSEQ2_COVERAGE_MODE", "both"),
             "mmseq2_coverage_and_threshold": os.environ.get("MMSEQ2_COVERAGE_AND_THRESHOLD", "0.1"),
             "mmseq2_coverage_or_threshold": os.environ.get("MMSEQ2_COVERAGE_OR_THRESHOLD", "0.1"),

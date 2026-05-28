@@ -432,7 +432,7 @@ def not_found(e):
 
 if __name__ == "__main__":
     print("[INFO] Starting comparaison_seq_struc_emb_new UI", file=sys.stderr, flush=True)
-    print("[INFO] Launch command: conda run --no-capture-output -n comparaison_emb python -u app.py", file=sys.stderr, flush=True)
-    print("[INFO] Working directory: Code/comparaison_seq_struc_emb_new/ui", file=sys.stderr, flush=True)
+    print("[INFO] Launch command: conda run --no-capture-output -n etude_esm2 python -u ui/app.py", file=sys.stderr, flush=True)
+    print("[INFO] Working directory: <repo>/ui", file=sys.stderr, flush=True)
     print("[INFO] Server URL: http://127.0.0.1:5000", file=sys.stderr, flush=True)
     app.run(debug=False, host="127.0.0.1", port=5000)
