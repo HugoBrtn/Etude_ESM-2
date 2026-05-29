@@ -2,65 +2,6 @@
 
 Ce dépôt contient une interface de consultation pour explorer et comparer plusieurs méthodes de similarité entre protéines en utilisant des embeddings ESM-2. Le jeu de données et l'interface web sont pré-configurés et prêts à l'emploi. Il n'est pas conçu pour reconstruire la pipeline (lourde) de création des données.
 
-## Contexte scientifique
-
-Ce projet fait partie d'une **étude sur la construction de multi-graphes de pangénomes**. L'objectif est d'identifier les meilleures représentations d'embeddings pour capturer des similarités biologiques entre familles de gènes à travers différentes espèces.
-
-Les approches classiques de similarité (séquence, structure) peuvent manquer des relations biologiques complexes ou distantes, particulièrement quand la conservation est faible. Les **embeddings ESM-2** permettent de capturer des similarités **fonctionnelles et structurales latentes**, souvent invisibles aux méthodes d'alignement traditionnelles (MMseqs2, Needleman-Wunsch, TM-align).
-
-### Données utilisées
-
-L'interface contient des données de protéines originaires de :
-- ***Escherichia coli* (souche K-12 MG1655)**
-- ***Bacillus subtilis* (souche 168)**
-
-**Critères de sélection** :
-- Structures prédites par **AlphaFold** avec **pLDDT moyen > 85** (haute confiance)
-- Couverture query et target **> 0.3** dans alignements MMseqs2 (paires significatives)
-
-### Méthodes de similarité comparées
-
-L'interface compare **quatre catégories de similarité** :
-
-#### 1. **Alignements de séquence**
-- **MMseqs2** : similarité de séquence locale (clustering haute performance)
-- **Needleman-Wunsch** : similarité de séquence globale (programmation dynamique)
-
-#### 2. **Alignements structuraux**
-- **TM-align** : score d'alignement structural basé sur superposition 3D
-- **Foldseek** : recherche ultrapide de similarité structurale
-
-#### 3. **Embeddings ESM-2 (30 variantes)**
-
-Cinq **méthodes de pooling** testées pour agréger les embeddings de séquences :
-
-| Pooling | Description |
-|---------|-------------|
-| `max` | Valeur maximale par dimension |
-| `mean` | Moyenne des dimensions |
-| `sum` | Somme des dimensions |
-| `bos` | Embedding du token CLS (Beginning Of Sequence) |
-| `mahalanobis` | Distance de Mahalanobis—sensible aux variations structurées |
-
-Avec six **conditions post-traitement** pour gérer les dimensions outliers (valeurs extrêmes influençant les mesures) :
-
-| Condition | Approche |
-|-----------|----------|
-| `raw` | Pas de traitement |
-| `normalized` | Normalisation standard par dimension |
-| `mean_outliers_filtered` | Dimensions outliers (sur moyennes) retirées |
-| `mean_outliers_only` | Comparaison uniquement sur dimensions outliers des moyennes |
-| `std_outliers_filtered` | Dimensions outliers (sur écarts-types) retirées |
-| `std_outliers_only` | Comparaison uniquement sur dimensions outliers des écarts-types |
-
-**Total : 5 pooling × 6 conditions = 30 variantes d'embeddings**
-
-Détection des outliers : médiane + MAD (Median Absolute Deviation) ou IQR selon la distribution.
-
-**Mesure de similarité** : similarité cosinus sur les vecteurs d'embeddings normalisés.
-
----
-
 ## Installation et démarrage
 
 ### 1. Cloner le dépôt
@@ -88,10 +29,12 @@ conda activate etude_esm2
 
 ### 3. Régénérer le bundle (optionnel)
 
-Si le dépôt a été déplacé ou les données modifiées :
+Si le dépôt a été déplacé ou les données modifiées, régénérez le bundle :
 ```bash
 python scripts/prepare_interface_data.py
 ```
+
+ **Cette étape peut prendre 1-5 minutes** selon votre système. 
 
 ### 4. Lancer l'interface
 
@@ -105,6 +48,67 @@ http://127.0.0.1:5000
 ```
 
 ---
+
+
+## Contexte scientifique
+
+Ce projet fait partie d'une **étude sur la construction de multi-graphes de pangénomes**. L'objectif est d'identifier les meilleures post processing sur les embeddings ESM-2 pour capturer des similarités biologiques entre familles de gènes à travers différentes espèces.
+
+Les approches classiques de similarité (séquence, structure) peuvent manquer des relations biologiques complexes ou distantes, particulièrement quand la conservation est faible. Les **embeddings ESM-2** permettent de capturer des similarités **fonctionnelles et structurales latentes**, souvent invisibles aux méthodes d'alignement traditionnelles (MMseqs2, Needleman-Wunsch, TM-align, Foldseek).
+
+### Données utilisées
+
+L'interface contient des données de protéines originaires de :
+- ***Escherichia coli* (souche K-12 MG1655)**
+- ***Bacillus subtilis* (souche 168)**
+
+**Critères de sélection** :
+- Structures disponible sur **AlphaFold DB** avec pLDDT moyen > 85.
+- Couverture query et target > 0.3 dans les alignements MMseqs2.
+
+### Méthodes de similarité comparées
+
+L'interface compare quatre catégories de similarité :
+
+#### 1. **Alignements de séquence**
+- **MMseqs2** : similarité de séquence locale.
+- **Needleman-Wunsch** : similarité de séquence globale.
+
+#### 2. **Alignements structuraux**
+- **TM-align** : score d'alignement structural basé sur superposition 3D.
+- **Foldseek** : recherche ultrapide de similarité structurale.
+
+#### 3. **Embeddings ESM-2 (30 méthodes de post-processing)**
+
+Cinq **méthodes de pooling** testées pour agréger les embeddings de séquences :
+
+| Pooling | Description |
+|---------|-------------|
+| `max` | Valeur maximale par dimension |
+| `mean` | Moyenne des dimensions |
+| `sum` | Somme des dimensions |
+| `bos` | Embedding du token CLS (Beginning Of Sequence) |
+| `mahalanobis` | Distance de Mahalanobis—sensible aux variations structurées |
+
+Avec six **conditions post-traitement** pour gérer les dimensions outliers (valeurs extrêmes influençant les mesures) :
+
+| Condition | Approche |
+|-----------|----------|
+| `raw` | Pas de traitement |
+| `normalized` | Normalisation standard par dimension |
+| `mean_outliers_filtered` | Dimensions outliers (sur moyennes) retirées |
+| `mean_outliers_only` | Comparaison uniquement sur dimensions outliers des moyennes |
+| `std_outliers_filtered` | Dimensions outliers (sur écarts-types) retirées |
+| `std_outliers_only` | Comparaison uniquement sur dimensions outliers des écarts-types |
+
+**Total : 5 pooling × 6 conditions = 30 variantes d'embeddings**
+
+Détection des outliers : médiane + MAD (Median Absolute Deviation) ou IQR selon la distribution avec seuil à trois dimensiosn outliers.
+
+**Mesure de similarité** : similarité cosinus sur les vecteurs d'embeddings normalisés.
+
+---
+
 
 ## Utilisation de l'interface
 
