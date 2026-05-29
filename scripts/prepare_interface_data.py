@@ -3,8 +3,6 @@
 
 from __future__ import annotations
 
-import sys
-import time
 from pathlib import Path
 
 from tqdm import tqdm
@@ -26,11 +24,16 @@ def main() -> int:
     print("  • Reading embedding similarity data")
     print()
     
-    with tqdm(total=100, desc="Building global files", unit="%", ncols=70) as pbar:
-        # Simulate progress tracking
-        pbar.update(10)
-        result = update_global_files(ROOT)
-        pbar.update(90)
+    stage1_total = 100
+
+    def stage1_progress(value: float, message: str) -> None:
+        pbar.total = stage1_total
+        pbar.n = int(round(value))
+        pbar.set_postfix_str(message)
+        pbar.refresh()
+
+    with tqdm(total=stage1_total, desc="Building global files", unit="%", ncols=90) as pbar:
+        result = update_global_files(ROOT, progress=stage1_progress)
     
     print(f"✓ Updated proteins CSV: {result['proteins_csv']}")
     print(f"✓ Updated pairs CSV: {result['pairs_csv']}")
@@ -43,10 +46,19 @@ def main() -> int:
     print("  • Creating JSON payload")
     print()
     
-    with tqdm(total=100, desc="Exporting UI bundle", unit="%", ncols=70) as pbar:
-        pbar.update(20)
+    stage2_total = 100
+
+    def stage2_progress(value: float, message: str) -> None:
+        pbar.total = stage2_total
+        pbar.n = int(round(value))
+        pbar.set_postfix_str(message)
+        pbar.refresh()
+
+    with tqdm(total=stage2_total, desc="Exporting UI bundle", unit="%", ncols=90) as pbar:
         out_js = export_ui_data_js(ROOT)
-        pbar.update(80)
+        pbar.n = stage2_total
+        pbar.set_postfix_str("done")
+        pbar.refresh()
     
     print(f"✓ Wrote UI bundle: {out_js}")
     print()

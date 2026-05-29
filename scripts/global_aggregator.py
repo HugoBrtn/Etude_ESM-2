@@ -15,7 +15,7 @@ import json
 from datetime import datetime
 import os
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Callable, Dict, Tuple
 
 
 POOLINGS = ["max", "bos", "mean", "sum", "mahalanobis"]
@@ -59,6 +59,8 @@ PAIR_PRIORITY_COLUMNS = [
     "foldseek_bits_reverse",
 ]
 PAIR_PRIORITY_COLUMNS.extend(f"emb_{pooling}_{condition}" for pooling in POOLINGS for condition in EMBED_CONDITIONS)
+
+ProgressCallback = Callable[[float, str], None]
 
 
 def _safe_read_json(path: Path) -> dict:
@@ -152,6 +154,18 @@ def _is_nonempty(value: object) -> bool:
 
 def _row_priority(row: dict) -> int:
     return sum(1 for column in PAIR_PRIORITY_COLUMNS if _is_nonempty(row.get(column)))
+
+
+def _count_data_rows(path: Path) -> int:
+    if not path.exists():
+        return 0
+    with path.open("r", encoding="utf-8") as handle:
+        return max(sum(1 for _ in handle) - 1, 0)
+
+
+def _notify_progress(progress: ProgressCallback | None, value: float, message: str) -> None:
+    if progress is not None:
+        progress(max(0.0, min(100.0, value)), message)
 
 
 def _merge_pair_orientations(orientation_rows: list[dict]) -> dict:
@@ -287,12 +301,17 @@ def _default_pair_row(query: str, target: str) -> dict:
     return row
 
 
-def _build_proteins_global_csv(data_dir: Path, global_dir: Path) -> Path:
+def _build_proteins_global_csv(data_dir: Path, global_dir: Path, progress: ProgressCallback | None = None) -> Path:
     inputs_dir = data_dir / "inputs"
     out_path = global_dir / "proteins_global.csv"
 
     rows = []
-    for species_dir in sorted([p for p in inputs_dir.iterdir() if p.is_dir()]):
+    species_dirs = sorted([p for p in inputs_dir.iterdir() if p.is_dir()])
+    total_proteins = sum(1 for species_dir in species_dirs for p in species_dir.iterdir() if p.is_dir())
+    seen_proteins = 0
+    _notify_progress(progress, 0, "Scanning proteins")
+
+    for species_dir in species_dirs:
         species_key = species_dir.name
         for protein_dir in sorted([p for p in species_dir.iterdir() if p.is_dir()]):
             accession = protein_dir.name
@@ -338,6 +357,9 @@ def _build_proteins_global_csv(data_dir: Path, global_dir: Path) -> Path:
                     "metadata_file": _relative_to_root(data_dir.parent, protein_dir / "metadata.json") if (protein_dir / "metadata.json").exists() else "",
                 }
             )
+            seen_proteins += 1
+            if total_proteins:
+                _notify_progress(progress, (seen_proteins / total_proteins) * 20, f"Proteins ({seen_proteins}/{total_proteins})")
 
     fieldnames = [
         "accession",
@@ -369,6 +391,8 @@ def _build_proteins_global_csv(data_dir: Path, global_dir: Path) -> Path:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+
+    _notify_progress(progress, 20, "Proteins CSV complete")
 
     return out_path
 
@@ -426,13 +450,19 @@ def _load_mmseqs_pass_pairs(
     return passed
 
 
-def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accession: Dict[str, dict]) -> Path:
+def _build_pairs_global_csv(
+    data_dir: Path,
+    global_dir: Path,
+    protein_by_accession: Dict[str, dict],
+    progress: ProgressCallback | None = None,
+) -> Path:
     out_path = global_dir / "pairs_global.csv"
     rows: Dict[Tuple[str, str], dict] = {}
     and_threshold = float(os.environ.get("MMSEQ2_COVERAGE_AND_THRESHOLD", "0.1"))
     or_threshold = float(os.environ.get("MMSEQ2_COVERAGE_OR_THRESHOLD", "0.1"))
     coverage_mode = os.environ.get("MMSEQ2_COVERAGE_MODE", "both")
     pass_pairs = _load_mmseqs_pass_pairs(data_dir / "alignment_mmseq2", and_threshold, or_threshold, coverage_mode)
+    _notify_progress(progress, 20, "Scanning pairwise similarities")
 
     def get_row(query: str, target: str) -> dict:
         key = _pair_key(query, target)
@@ -456,6 +486,8 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
     mmseq_dir = data_dir / "alignment_mmseq2"
     summary_path = mmseq_dir / "pairwise_summary.csv"
     if summary_path.exists():
+        rows_total = _count_data_rows(summary_path)
+        rows_seen = 0
         with summary_path.open("r", encoding="utf-8") as handle:
             reader = csv.DictReader(handle)
             for row0 in reader:
@@ -486,8 +518,13 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                     row["has_mmseq2"] = "0"
 
                 row["updated_at"] = datetime.now().isoformat()
+                rows_seen += 1
+                if rows_total:
+                    _notify_progress(progress, 20 + (rows_seen / rows_total) * 20, f"MMseqs2 ({rows_seen}/{rows_total})")
     elif mmseq_dir.exists():
-        for pair_dir in sorted([p for p in mmseq_dir.iterdir() if p.is_dir()]):
+        pair_dirs = sorted([p for p in mmseq_dir.iterdir() if p.is_dir()])
+        pair_total = len(pair_dirs)
+        for index, pair_dir in enumerate(pair_dirs, start=1):
             row0 = _read_first_tsv_row(pair_dir / "alignment.tsv")
             if not row0:
                 continue
@@ -510,10 +547,14 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
             row["mmseq2_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
             row["has_mmseq2"] = "1"
             row["updated_at"] = datetime.now().isoformat()
+            if pair_total:
+                _notify_progress(progress, 20 + (index / pair_total) * 20, f"MMseqs2 ({index}/{pair_total})")
 
     nw_dir = data_dir / "alignment_needleman_wunsh"
     summary_path = nw_dir / "pairwise_summary.csv"
     if summary_path.exists():
+        rows_total = _count_data_rows(summary_path)
+        rows_seen = 0
         with summary_path.open("r", encoding="utf-8") as handle:
             reader = csv.DictReader(handle)
             for row0 in reader:
@@ -536,8 +577,13 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                 row["nw_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
                 row["has_needleman"] = "1"
                 row["updated_at"] = datetime.now().isoformat()
+                rows_seen += 1
+                if rows_total:
+                    _notify_progress(progress, 40 + (rows_seen / rows_total) * 15, f"Needleman-Wunsch ({rows_seen}/{rows_total})")
     elif nw_dir.exists():
-        for pair_dir in sorted([p for p in nw_dir.iterdir() if p.is_dir()]):
+        pair_dirs = sorted([p for p in nw_dir.iterdir() if p.is_dir()])
+        pair_total = len(pair_dirs)
+        for index, pair_dir in enumerate(pair_dirs, start=1):
             row0 = _read_first_tsv_row(pair_dir / "alignment.tsv")
             if not row0:
                 continue
@@ -559,11 +605,15 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
             row["nw_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
             row["has_needleman"] = "1"
             row["updated_at"] = datetime.now().isoformat()
+            if pair_total:
+                _notify_progress(progress, 40 + (index / pair_total) * 15, f"Needleman-Wunsch ({index}/{pair_total})")
 
     tm_dir = data_dir / "alignment_structure_tmscore"
     foldseek_dir = data_dir / "alignment_structure_foldseek"
     summary_path = tm_dir / "pairwise_summary.csv"
     if summary_path.exists():
+        rows_total = _count_data_rows(summary_path)
+        rows_seen = 0
         with summary_path.open("r", encoding="utf-8") as handle:
             reader = csv.DictReader(handle)
             for row0 in reader:
@@ -588,8 +638,13 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                 row["tm_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
                 row["has_tmalign"] = "1"
                 row["updated_at"] = datetime.now().isoformat()
+                rows_seen += 1
+                if rows_total:
+                    _notify_progress(progress, 55 + (rows_seen / rows_total) * 15, f"TM-align ({rows_seen}/{rows_total})")
     elif tm_dir.exists():
-        for pair_dir in sorted([p for p in tm_dir.iterdir() if p.is_dir()]):
+        pair_dirs = sorted([p for p in tm_dir.iterdir() if p.is_dir()])
+        pair_total = len(pair_dirs)
+        for index, pair_dir in enumerate(pair_dirs, start=1):
             row0 = _read_first_tsv_row(pair_dir / "alignment.tsv")
             if not row0:
                 continue
@@ -613,10 +668,14 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
             row["tm_alignment_file"] = _relative_to_root(data_dir.parent, align_txt) if align_txt.exists() else ""
             row["has_tmalign"] = "1"
             row["updated_at"] = datetime.now().isoformat()
+            if pair_total:
+                _notify_progress(progress, 55 + (index / pair_total) * 15, f"TM-align ({index}/{pair_total})")
 
     # Additionally ingest Foldseek results if present
     if foldseek_dir.exists():
-        for pair_dir in sorted([p for p in foldseek_dir.iterdir() if p.is_dir()]):
+        pair_dirs = sorted([p for p in foldseek_dir.iterdir() if p.is_dir()])
+        pair_total = len(pair_dirs)
+        for index, pair_dir in enumerate(pair_dirs, start=1):
             tsv_path = pair_dir / "alignment.tsv"
             tsv_path_reverse = pair_dir / "alignment_reverse.tsv"
             metadata = _safe_read_json(pair_dir / "metadata.json")
@@ -659,10 +718,14 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                 if row0 or row_rev:
                     row["has_foldseek"] = "1"
             row["updated_at"] = datetime.now().isoformat()
+            if pair_total:
+                _notify_progress(progress, 70 + (index / pair_total) * 10, f"Foldseek ({index}/{pair_total})")
 
     emb_dir = data_dir / "embedding_similarity"
     summary_path = emb_dir / "pairwise_summary.csv"
     if summary_path.exists():
+        rows_total = _count_data_rows(summary_path)
+        rows_seen = 0
         with summary_path.open("r", encoding="utf-8") as handle:
             reader = csv.DictReader(handle)
             for row0 in reader:
@@ -680,8 +743,13 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                     row[col] = row0.get("cosine_similarity", "")
                     row["has_embedding"] = "1"
                     row["updated_at"] = datetime.now().isoformat()
+                    rows_seen += 1
+                    if rows_total:
+                        _notify_progress(progress, 80 + (rows_seen / rows_total) * 20, f"Embeddings ({rows_seen}/{rows_total})")
     elif emb_dir.exists():
-        for pair_dir in sorted([p for p in emb_dir.iterdir() if p.is_dir()]):
+        pair_dirs = sorted([p for p in emb_dir.iterdir() if p.is_dir()])
+        pair_total = len(pair_dirs)
+        for index, pair_dir in enumerate(pair_dirs, start=1):
             tsv_path = pair_dir / "similarity.tsv"
             if not tsv_path.exists():
                 continue
@@ -702,6 +770,8 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
                         row[col] = row0.get("cosine_similarity", "")
                         row["has_embedding"] = "1"
                         row["updated_at"] = datetime.now().isoformat()
+            if pair_total:
+                _notify_progress(progress, 80 + (index / pair_total) * 20, f"Embeddings ({index}/{pair_total})")
 
     canonical_rows: Dict[Tuple[str, str], Dict[Tuple[str, str], dict]] = {}
     for (query, target), row in rows.items():
@@ -739,18 +809,20 @@ def _build_pairs_global_csv(data_dir: Path, global_dir: Path, protein_by_accessi
         for row in merged_rows:
             writer.writerow(row)
 
+    _notify_progress(progress, 100, f"Pairs CSV complete ({len(merged_rows)} pairs)")
+
     return out_path
 
 
-def update_global_files(root_dir: Path) -> dict:
+def update_global_files(root_dir: Path, progress: ProgressCallback | None = None) -> dict:
     root_dir = Path(root_dir)
     data_dir = root_dir / "data"
     global_dir = data_dir / "GLOBAL"
     global_dir.mkdir(parents=True, exist_ok=True)
 
-    proteins_csv = _build_proteins_global_csv(data_dir, global_dir)
+    proteins_csv = _build_proteins_global_csv(data_dir, global_dir, progress=progress)
     protein_by_accession = _protein_lookup(proteins_csv)
-    pairs_csv = _build_pairs_global_csv(data_dir, global_dir, protein_by_accession)
+    pairs_csv = _build_pairs_global_csv(data_dir, global_dir, protein_by_accession, progress=progress)
 
     return {
         "proteins_csv": str(proteins_csv),

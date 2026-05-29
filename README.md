@@ -75,8 +75,20 @@ L'interface compare quatre catégories de similarité :
 - **Needleman-Wunsch** : similarité de séquence globale.
 
 #### 2. **Alignements structuraux**
-- **TM-align** : score d'alignement structural basé sur superposition 3D.
-- **Foldseek** : recherche ultrapide de similarité structurale.
+- **TM-align** : algorithme d'alignement structural itératif qui cherche explicitement la meilleure superposition 3D entre deux protéines, il optimise directement le TM-score.
+- **Foldseek** : moteur de recherche structurelle très rapide, pensé pour le filtrage à grande échelle. Il repose sur des représentations compactes et des heuristiques.
+
+#### 2.1 **TM-score et scores associés**
+
+Le **TM-score** mesure la qualité d'une superposition 3D sur une échelle de 0 à 1. Il favorise les alignements globalement cohérents plutôt que les seules régions très proches spatialement. En pratique, un score supérieur à 0,5 est souvent interprété comme un signal de similarité structurelle significative, alors qu'un score inférieur suggère plutôt une relation faible ou accidentelle.
+
+$$
+\frac{1}{L_{\text{norm}}} \sum_{i=1}^{L_{\text{align}}} \frac{1}{1 + \left(\frac{d_i}{d_0}\right)^2}
+$$
+
+Dans cette étude, les sorties structurales doivent être lues avec cette distinction en tête :
+- **TM-align** fournit le TM-score de référence, obtenu après optimisation de la superposition.
+- **Foldseek** fournit des scores TM-like plus rapides, utiles pour explorer de grands ensembles de paires, mais qui restent des approximations heuristiques du TM-score officiel.
 
 #### 3. **Embeddings ESM-2 (30 méthodes de post-processing)**
 
@@ -115,10 +127,9 @@ Détection des outliers : médiane + MAD (Median Absolute Deviation) ou IQR selo
 L'interface permet de :
 - **Rechercher des protéines** par accession ou nom
 - **Afficher les paires** et leurs métriques de similarité (séquence, structure, embeddings)
-- **Filtre par méthode** : comparhez MMseqs2 vs. embeddings vs. TM-align
-- **Visualiser les alignements** : accédez aux fichiers d'alignement bruts
-- **Consulter les structures** : affichage 3D des prédictions AlphaFold
-- **Télécharger les données** : exportez les CSV globales
+- **Filtre par méthode** : comparer MMseqs2 vs. embeddings vs. TM-align
+- **Visualiser les alignements** : accéder aux fichiers d'alignement bruts
+- **Consulter les structures** : affichage 3D des structures d'AlphaFold DB
 
 ---
 
